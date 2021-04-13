@@ -55,6 +55,7 @@ library graphics-sdl
                      , Graphics.SDL.Data.Color
                      , Graphics.SDL.Data.Picture
                      , Graphics.SDL.Data.Window
+                     , Graphics.SDL.Interact
 
   other-modules:       Graphics.SDL.Internal.Render
                      , Graphics.SDL.Internal.DrawState
