@@ -20,7 +20,7 @@ module Graphics.SDL.Data.Color (
 import Data.Word (Word8)
 import SDL (V4 (..))
 
--- The colour represented vector consisting of RGBA values
+-- | The colour represented vector consisting of RGBA values
 type Color = V4 Word8
 
 black :: Color

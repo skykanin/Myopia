@@ -20,12 +20,18 @@ import SDL.Video (Renderer, clear, present, rendererDrawColor)
 import Prelude hiding (interact)
 
 interact ::
-  Renderer -> -- The renderer
-  Color -> -- background colour
-  world -> -- initial world state
-  (world -> Picture) -> -- a function to produce the current picture
-  (world -> world) -> -- iterate world
-  (Event -> world -> world) -> -- a function to handle input events
+  -- | The renderer
+  Renderer ->
+  -- | background colour
+  Color ->
+  -- | initial world state
+  world ->
+  -- | a function to produce the current picture
+  (world -> Picture) ->
+  -- | iterate world
+  (world -> world) ->
+  -- | a function to handle input events
+  (Event -> world -> world) ->
   IO ()
 interact renderer bgColor world toPicture iterateWorld eventHandler = do
   _ <- with 10 delay_
