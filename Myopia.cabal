@@ -26,7 +26,7 @@ executable myopia
   hs-source-dirs:      app
   build-depends:       base ^>= 4.14.1.0
                      , myopia-lib
-  ghc-options:         -threaded -Wall -O2
+  ghc-options:         -Wall -O2 
 
 -- The game itself exposed as a library to be used in the executable
 library myopia-lib
@@ -39,7 +39,9 @@ library myopia-lib
                      , lens ^>= 5.0.1
                      , random ^>= 1.2.0
                      , sdl2 ^>= 2.5.3.0
-                     , sdl-wrapper
+                     , sdl2-image ^>= 2.0.0
+                     , sdl2-gfx
+                     , graphics-sdl
                      , text ^>= 1.2.4.1
                      , transformers ^>= 0.5.6.2
                      , unordered-containers ^>= 0.2.13.0
@@ -47,16 +49,26 @@ library myopia-lib
   ghc-options:         -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-unticked-promoted-constructors
 
 -- The library providing drawing and rendering abstractions over SDL2
-library sdl-wrapper
+library graphics-sdl
   import:              shared-properties
-  exposed-modules:     Wrapper
+  exposed-modules:     Graphics.SDL
+                     , Graphics.SDL.Data.Color
+                     , Graphics.SDL.Data.Picture
+                     , Graphics.SDL.Data.Window
+
+  other-modules:       Graphics.SDL.Internal.Render
+                     , Graphics.SDL.Internal.DrawState
+                     , Graphics.SDL.Internal.Interact
+
   build-depends:       base ^>= 4.14.1.0
                      , containers ^>= 0.6.4.1
                      , lens ^>= 5.0.1
                      , sdl2 ^>= 2.5.3.0
                      , sdl2-image ^>= 2.0.0
+                     , sdl2-gfx
                      , text ^>= 1.2.4.1
                      , transformers ^>= 0.5.6.2
                      , unordered-containers ^>= 0.2.13.0
-  hs-source-dirs:      lib, lib/Wrapper
+                     , vector ^>= 0.12.2.0
+  hs-source-dirs:      lib
   ghc-options:         -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-unticked-promoted-constructors

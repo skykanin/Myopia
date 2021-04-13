@@ -32,6 +32,7 @@
         libraries = [
           pkg-config
           SDL2
+          SDL2_gfx
           SDL2_image
         ];
         libraryPath = "${makeLibraryPath libraries}";
