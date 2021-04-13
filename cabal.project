@@ -1,0 +1,5 @@
+source-repository-package
+  type: git
+  location: git://github.com/skykanin/sdl2-gfx.git
+
+packages: .
