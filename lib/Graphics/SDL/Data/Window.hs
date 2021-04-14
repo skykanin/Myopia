@@ -10,12 +10,16 @@ module Graphics.SDL.Data.Window (
   WindowConfig (..),
   WindowMode (..),
   WindowGraphicsContext (..),
+  WindowTitle,
   defaultWindow,
 ) where
 
+import Data.Text (Text)
 import SDL.Video (
   WindowConfig (..),
   WindowGraphicsContext (..),
   WindowMode (..),
   defaultWindow,
  )
+
+type WindowTitle = Text

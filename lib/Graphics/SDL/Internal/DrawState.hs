@@ -11,8 +11,10 @@ module Graphics.SDL.Internal.DrawState (
   startDrawState,
 ) where
 
+import Data.IORef (IORef, newIORef)
 import Graphics.SDL.Data.Color (Color)
-import SDL (V4 (..))
+import Graphics.SDL.Data.Picture (Name)
+import SDL (Texture, V4 (..))
 
 -- | State of the current draw loop
 data DrawState = DrawState
@@ -20,8 +22,12 @@ data DrawState = DrawState
     filled :: Bool
   , -- | Color to draw picture in
     color :: Color
+  , -- | Cache of textures that we've loaded
+    stateTextures :: IORef [(Name, Texture)]
   }
-  deriving (Eq, Show)
+  deriving (Eq)
 
-startDrawState :: DrawState
-startDrawState = DrawState {filled = False, color = V4 0 0 0 255}
+startDrawState :: IO DrawState
+startDrawState = do
+  ref <- newIORef []
+  pure $ DrawState {filled = False, color = V4 0 0 0 255, stateTextures = ref}

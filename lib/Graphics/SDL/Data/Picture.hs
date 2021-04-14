@@ -6,13 +6,15 @@
    Portability : portable
  Module defining the Picture data type which represents what to be rendered and helper functions
 -}
-module Graphics.SDL.Data.Picture (Picture (..), SpriteData (..), noTransform, scaleBy) where
+module Graphics.SDL.Data.Picture (Name, Picture (..), SpriteData (..), noTransform, scaleBy) where
 
 import Data.Int (Int16)
 import Foreign.C.Types (CDouble, CInt)
 import Graphics.SDL.Data.Color (Color)
-import SDL (Point, Texture, V2 (..))
+import SDL (Point, V2 (..))
 import SDL.Primitive (Pos, Radius, Width)
+
+type Name = String
 
 -- | The picture to be drawn on the screen
 data Picture
@@ -32,8 +34,8 @@ data Picture
     Fill Picture
   | -- | Draw a shape in a specific colour
     Color Color Picture
-  | -- | Draw a sprite given custom sprite data type
-    Sprite Texture SpriteData
+  | -- | Draw a sprite given the sprite name, file location and sprite data
+    Sprite Name FilePath SpriteData
   | -- | Draw a picture consisting of several others
     Pictures [Picture]
   deriving (Eq)
