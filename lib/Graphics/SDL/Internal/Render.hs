@@ -25,7 +25,7 @@ select b f g = if b then f else g
 
 -- | Draws picture to the render context
 drawPicture :: Renderer -> DrawState -> Picture -> IO ()
-drawPicture renderer state@(DrawState {..}) picture =
+drawPicture renderer state@DrawState {..} picture =
   case picture of
     Line posA posB -> smoothLine renderer posA posB color
     ThickLine posA posB width -> thickLine renderer posA posB width color
@@ -42,7 +42,7 @@ drawPicture renderer state@(DrawState {..}) picture =
       drawPicture renderer (state {filled = True}) nextPicture
     Color newColor nextPicture ->
       drawPicture renderer (state {color = newColor}) nextPicture
-    Sprite name filePath (SpriteData {..}) -> do
+    Sprite name filePath SpriteData {..} -> do
       rendererRenderTarget renderer $= Nothing
       texture <- loadTextureFromCache stateTextures renderer name filePath
       texInfo <- queryTexture texture
@@ -61,5 +61,5 @@ loadTextureFromCache cacheRef renderer texName texPath = do
     Nothing -> do
       tex <- loadTexture renderer texPath
       modifyIORef cacheRef ((texName, tex) :)
-      pure $ tex
+      pure tex
     Just (_, tex) -> pure tex
