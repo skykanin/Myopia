@@ -1,0 +1,8 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:myopia-lib"
+    - path: "./exe"
+      component: "exe:myopia"
+    - path: "./lib"
+      component: "lib:graphics-sdl"
