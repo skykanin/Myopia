@@ -57,6 +57,8 @@ library graphics-sdl
   import:              shared-properties
   exposed-modules:     Graphics.SDL
                      , Graphics.SDL.Data.Color
+                     , Graphics.SDL.Data.Event
+                     , Graphics.SDL.Data.Input
                      , Graphics.SDL.Data.Picture
                      , Graphics.SDL.Data.Window
                      , Graphics.SDL.Interact
