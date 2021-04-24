@@ -33,6 +33,7 @@ library myopia-lib
   import:              shared-properties
   exposed-modules:     Myopia
                      , Myopia.Draw
+                     , Myopia.Event
                      , Myopia.State.Game
                      , Myopia.State.Player
                      , Myopia.State.Type
@@ -42,8 +43,6 @@ library myopia-lib
                      , filepath ^>= 1.4.2.1
                      , lens ^>= 5.0.1
                      , random ^>= 1.2.0
-                     , sdl2 ^>= 2.5.3.0
-                     , sdl2-image ^>= 2.0.0
                      , sdl2-gfx
                      , graphics-sdl
                      , text ^>= 1.2.4.1

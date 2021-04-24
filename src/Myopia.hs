@@ -10,10 +10,11 @@ module Myopia (run) where
 
 import Graphics.SDL (black, defaultWindow, interact, withSize)
 import Myopia.Draw (draw)
+import Myopia.Event (handleEvent)
 import Myopia.State.Game (iterateWorld, startState)
 import Prelude hiding (interact)
 
 run :: IO ()
-run = interact "Myopia" winConf black startState draw iterateWorld (const id)
+run = interact "Myopia" winConf black startState draw iterateWorld handleEvent
   where
     winConf = withSize (1200, 800) defaultWindow
