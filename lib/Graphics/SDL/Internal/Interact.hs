@@ -56,7 +56,7 @@ loop ::
   (Event -> world -> world) ->
   IO ()
 loop renderer bgColor world drawState toPicture iterateWorld eventHandler = do
-  _ <- with 10 delay_
+  _ <- with 60 delay_
   clear renderer
   drawPicture renderer drawState (toPicture world)
   rendererDrawColor renderer $= bgColor
