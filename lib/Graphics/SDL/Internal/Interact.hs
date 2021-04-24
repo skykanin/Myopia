@@ -9,11 +9,10 @@
 module Graphics.SDL.Internal.Interact (interact) where
 
 import Control.Monad (unless)
-import Data.IORef (readIORef)
 import Graphics.SDL.Data.Color (Color)
 import Graphics.SDL.Data.Picture (Picture)
 import Graphics.SDL.Data.Window (WindowConfig, WindowTitle)
-import Graphics.SDL.Internal.DrawState (DrawState, startDrawState, stateTextures)
+import Graphics.SDL.Internal.DrawState (DrawState, startDrawState)
 import Graphics.SDL.Internal.Render (drawPicture)
 import SDL (initializeAll, ($=))
 import SDL.Event (Event, EventPayload (..), eventPayload, pollEvents)
@@ -63,7 +62,6 @@ loop renderer bgColor world drawState toPicture iterateWorld eventHandler = do
   rendererDrawColor renderer $= bgColor
   events <- pollEvents
   present renderer
-  --print =<< length <$> (readIORef $ stateTextures drawState)
   let quit = elem QuitEvent $ map eventPayload events
       newWorld = iterateWorld $ foldr eventHandler world events
   unless quit $ loop renderer bgColor newWorld drawState toPicture iterateWorld eventHandler
