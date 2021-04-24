@@ -11,7 +11,9 @@
 module Myopia.Draw where
 
 import Graphics.SDL
-import Myopia.GameState (Animate (..), GameState (..), Player (..), PlayerState (..), TileType (..))
+import Myopia.State.Game (GameState (..), TileType (..))
+import Myopia.State.Player (Player (..), PlayerMovement (..))
+import Myopia.State.Type (Animate (..))
 
 draw :: GameState -> Picture
 draw GameState {..} =
@@ -23,7 +25,7 @@ draw GameState {..} =
 drawPlayer :: Player -> Picture
 drawPlayer Player {..} =
   let spriteData = scaleBy 4 $ noTransform position
-   in case playerState of
+   in case playerMovement of
         Idle -> Sprite name fp spriteData
           where
             (name, fp) = sprites idle !! currentSprite idle

@@ -10,7 +10,7 @@ module Myopia (run) where
 
 import Graphics.SDL (black, defaultWindow, interact, withSize)
 import Myopia.Draw (draw)
-import Myopia.GameState (iterateWorld, startState)
+import Myopia.State.Game (iterateWorld, startState)
 import Prelude hiding (interact)
 
 run :: IO ()
