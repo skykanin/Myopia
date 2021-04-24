@@ -51,11 +51,13 @@ initPlayer =
         Animate
           { sprites = zip idleNames (withAssetPath idleSprites)
           , currentSprite = 0
+          , animSlowdown = 6
           }
     , running =
         Animate
           { sprites = zip runNames (withAssetPath runSprites)
           , currentSprite = 0
+          , animSlowdown = 6
           }
     , playerMovement = Idle
     , position = P (V2 600 300)
@@ -64,5 +66,5 @@ initPlayer =
 iteratePlayer :: Player -> Player
 iteratePlayer player@Player {..} =
   case playerMovement of
-    Idle -> player {idle = idle {currentSprite = (currentSprite idle + 1) `mod` length (sprites idle)}}
-    Running -> player {running = running {currentSprite = (currentSprite running + 1) `mod` length (sprites running)}}
+    Idle -> player {idle = idle {currentSprite = (currentSprite idle + 1) `mod` (animSlowdown idle * length (sprites idle))}}
+    Running -> player {running = running {currentSprite = (currentSprite running + 1) `mod` (animSlowdown running * length (sprites running))}}

@@ -28,10 +28,10 @@ drawPlayer Player {..} =
    in case playerMovement of
         Idle -> Sprite name fp spriteData
           where
-            (name, fp) = sprites idle !! currentSprite idle
+            (name, fp) = sprites idle !! (currentSprite idle `div` animSlowdown idle)
         Running -> Sprite name fp spriteData
           where
-            (name, fp) = sprites running !! currentSprite running
+            (name, fp) = sprites running !! (currentSprite running `div` animSlowdown running)
 
 drawRoom :: (Name, FilePath) -> (Name, FilePath) -> [(TileType, SpriteData)] -> Picture
 drawRoom (fName, fPath) (wName, wPath) room =

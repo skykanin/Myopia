@@ -21,5 +21,7 @@ data Animate = Animate
     sprites :: [Sprite]
   , -- | The sprite we are currently rendering
     currentSprite :: Int
+  , -- | The rate at which to slow down the rendering speed
+    animSlowdown :: Int
   }
   deriving (Show)
