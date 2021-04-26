@@ -63,14 +63,10 @@ library graphics-sdl
                      , Graphics.SDL.Internal.Interact
 
   build-depends:       base ^>= 4.14.1.0
-                     , containers ^>= 0.6.4.1
-                     , lens ^>= 5.0.1
                      , sdl2 ^>= 2.5.3.0
                      , sdl2-image ^>= 2.0.0
                      , sdl2-gfx
                      , text ^>= 1.2.4.1
-                     , transformers ^>= 0.5.6.2
-                     , unordered-containers ^>= 0.2.13.0
                      , vector ^>= 0.12.2.0
   hs-source-dirs:      lib
   ghc-options:         -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-unticked-promoted-constructors
