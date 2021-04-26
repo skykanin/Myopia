@@ -8,6 +8,7 @@
 -}
 module Myopia.State.Type (
   Animate (..),
+  MoveDir (..),
   Sprite,
 ) where
 
@@ -25,3 +26,6 @@ data Animate = Animate
     animSlowdown :: Int
   }
   deriving (Show)
+
+data MoveDir = Up | Down | Left | Right
+  deriving (Eq, Show)

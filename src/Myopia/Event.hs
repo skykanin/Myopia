@@ -11,8 +11,7 @@
 -}
 module Myopia.Event (handleEvent) where
 
-import Graphics.SDL (CInt, Point (..), V2 (..))
-import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym))
+import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
 import Graphics.SDL.Data.Input (
   Keysym (keysymScancode),
   Scancode,
@@ -23,21 +22,26 @@ import Graphics.SDL.Data.Input (
  )
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))
+import Myopia.State.Type (MoveDir (..))
+import Prelude hiding (Left, Right)
 
-updatePosBy :: CInt -> Scancode -> Point V2 CInt -> Point V2 CInt
-updatePosBy i ScancodeUp (P (V2 x y)) = P (V2 x (y - i))
-updatePosBy i ScancodeDown (P (V2 x y)) = P (V2 x (y + i))
-updatePosBy i ScancodeLeft (P (V2 x y)) = P (V2 (x - i) y)
-updatePosBy i ScancodeRight (P (V2 x y)) = P (V2 (x + i) y)
-updatePosBy _ _ p = p
+updateMovement :: Scancode -> MoveDir -> MoveDir
+updateMovement ScancodeUp _ = Up
+updateMovement ScancodeDown _ = Down
+updateMovement ScancodeLeft _ = Left
+updateMovement ScancodeRight _ = Right
+updateMovement _ d = d
+
+updateMoveState :: Scancode -> PlayerMovement
+updateMoveState scancode = if scancode `elem` [ScancodeUp, ScancodeDown, ScancodeLeft, ScancodeRight] then Running else Idle
 
 updatePlayer :: Scancode -> InputMotion -> Player -> Player
-updatePlayer keyCode inputMotion player@Player {..} =
+updatePlayer scancode inputMotion player@Player {..} =
   case inputMotion of
     Pressed ->
       player
-        { playerMovement = Running
-        , position = updatePosBy 5 keyCode position
+        { moveDirection = updateMovement scancode moveDirection
+        , playerMovement = updateMoveState scancode
         }
     Released ->
       player {playerMovement = Idle}
@@ -48,5 +52,8 @@ handleEvent event gamestate@GameState {..} =
     KeyboardEvent kbed ->
       let keycode = keysymScancode $ keyboardEventKeysym kbed
           keymotion = keyboardEventKeyMotion kbed
-       in gamestate {player = updatePlayer keycode keymotion player}
+          repeat = keyboardEventRepeat kbed
+       in if not repeat
+            then gamestate {player = updatePlayer keycode keymotion player}
+            else gamestate
     _ -> gamestate
