@@ -11,40 +11,49 @@
 -}
 module Myopia.Event (handleEvent) where
 
+import Data.Set (Set)
+import qualified Data.Set as S
 import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
 import Graphics.SDL.Data.Input (
   Keysym (keysymScancode),
   Scancode,
-  pattern ScancodeDown,
-  pattern ScancodeLeft,
-  pattern ScancodeRight,
-  pattern ScancodeUp,
+  pattern ScancodeA,
+  pattern ScancodeD,
+  pattern ScancodeS,
+  pattern ScancodeW,
  )
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))
 import Myopia.State.Type (MoveDir (..))
-import Prelude hiding (Left, Right)
 
-updateMovement :: Scancode -> MoveDir -> MoveDir
-updateMovement ScancodeUp _ = Up
-updateMovement ScancodeDown _ = Down
-updateMovement ScancodeLeft _ = Left
-updateMovement ScancodeRight _ = Right
-updateMovement _ d = d
+scanToDir :: Scancode -> Maybe MoveDir
+scanToDir ScancodeW = Just MoveUp
+scanToDir ScancodeS = Just MoveDown
+scanToDir ScancodeA = Just MoveLeft
+scanToDir ScancodeD = Just MoveRight
+scanToDir _ = Nothing
 
-updateMoveState :: Scancode -> PlayerMovement
-updateMoveState scancode = if scancode `elem` [ScancodeUp, ScancodeDown, ScancodeLeft, ScancodeRight] then Running else Idle
+updateMoveState :: Set MoveDir -> PlayerMovement
+updateMoveState moveDirs
+  | S.null moveDirs = Idle
+  | otherwise = Running
+
+updateMovements :: Scancode -> InputMotion -> Set MoveDir -> Set MoveDir
+updateMovements scancode Pressed = alter S.insert (scanToDir scancode)
+updateMovements scancode Released = alter S.delete (scanToDir scancode)
+
+alter :: (a -> Set a -> Set a) -> Maybe a -> Set a -> Set a
+alter _ Nothing dirs = dirs
+alter f (Just el) dirs = f el dirs
 
 updatePlayer :: Scancode -> InputMotion -> Player -> Player
 updatePlayer scancode inputMotion player@Player {..} =
-  case inputMotion of
-    Pressed ->
-      player
-        { moveDirection = updateMovement scancode moveDirection
-        , playerMovement = updateMoveState scancode
-        }
-    Released ->
-      player {playerMovement = Idle}
+  player
+    { moveDirections = newMovements
+    , playerMovement = updateMoveState newMovements
+    }
+  where
+    newMovements = updateMovements scancode inputMotion moveDirections
 
 handleEvent :: Event -> GameState -> GameState
 handleEvent event gamestate@GameState {..} =

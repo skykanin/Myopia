@@ -27,5 +27,6 @@ data Animate = Animate
   }
   deriving (Show)
 
-data MoveDir = Up | Down | Left | Right
-  deriving (Eq, Show)
+-- | Indicates which direction a character is moving
+data MoveDir = MoveUp | MoveDown | MoveLeft | MoveRight
+  deriving (Eq, Ord, Show)

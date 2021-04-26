@@ -15,6 +15,8 @@ module Myopia.State.Player (
   iteratePlayer,
 ) where
 
+import Data.Set (Set)
+import qualified Data.Set as S
 import Graphics.SDL (CInt, Name, Point (P), V2 (V2))
 import Myopia.State.Type (Animate (..), MoveDir (..))
 import Prelude hiding (Left, Right)
@@ -26,7 +28,7 @@ data Player = Player
   { idle :: Animate
   , running :: Animate
   , playerMovement :: PlayerMovement
-  , moveDirection :: MoveDir
+  , moveDirections :: Set MoveDir
   , position :: Point V2 CInt
   }
   deriving (Show)
@@ -62,15 +64,15 @@ initPlayer =
           , animSlowdown = 6
           }
     , playerMovement = Idle
-    , moveDirection = Up
+    , moveDirections = S.empty
     , position = P (V2 600 300)
     }
 
 movePlayerBy :: CInt -> MoveDir -> Point V2 CInt -> Point V2 CInt
-movePlayerBy i Up (P (V2 x y)) = P (V2 x (y - i))
-movePlayerBy i Down (P (V2 x y)) = P (V2 x (y + i))
-movePlayerBy i Left (P (V2 x y)) = P (V2 (x - i) y)
-movePlayerBy i Right (P (V2 x y)) = P (V2 (x + i) y)
+movePlayerBy i MoveUp (P (V2 x y)) = P (V2 x (y - i))
+movePlayerBy i MoveDown (P (V2 x y)) = P (V2 x (y + i))
+movePlayerBy i MoveLeft (P (V2 x y)) = P (V2 (x - i) y)
+movePlayerBy i MoveRight (P (V2 x y)) = P (V2 (x + i) y)
 
 iteratePlayer :: Player -> Player
 iteratePlayer player@Player {..} =
@@ -79,5 +81,5 @@ iteratePlayer player@Player {..} =
     Running ->
       player
         { running = running {currentSprite = (currentSprite running + 1) `mod` (animSlowdown running * length (sprites running))}
-        , position = movePlayerBy 5 moveDirection position
+        , position = foldr (movePlayerBy 5) position moveDirections
         }
