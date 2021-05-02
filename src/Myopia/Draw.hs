@@ -10,15 +10,19 @@
 -}
 module Myopia.Draw where
 
+import Data.List (find)
+import Data.Maybe (fromMaybe)
+import qualified Data.Vector as V
 import Graphics.SDL
-import Myopia.State.Game (GameState (..), TileType (..))
+import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))
+import Myopia.State.Room (Room (..))
 import Myopia.State.Type (Animate (..))
 
 draw :: GameState -> Picture
 draw GameState {..} =
   Pictures
-    [ drawRoom floorTex wallTex room
+    [ drawRoom room
     , drawPlayer player
     ]
 
@@ -32,10 +36,10 @@ drawPlayer Player {..} =
       where
         (name, fp) = sprites running !! (currentSprite running `div` animSlowdown running)
 
-drawRoom :: (Name, FilePath) -> (Name, FilePath) -> [(TileType, SpriteData)] -> Picture
-drawRoom (fName, fPath) (wName, wPath) room =
-  Pictures $ map (uncurry tile) room
+drawRoom :: Room -> Picture
+drawRoom Room {..} = Pictures $ V.toList $ fmap toPicture roomLayout
   where
-    tile :: TileType -> SpriteData -> Picture
-    tile Floor = Sprite fName fPath
-    tile Wall = Sprite wName wPath
+    toPicture (tileType, spriteData) = Sprite name filePath spriteData
+      where
+        (_, (name, filePath)) =
+          fromMaybe (error "Texture missing in list") $ find ((==) tileType . fst) textures

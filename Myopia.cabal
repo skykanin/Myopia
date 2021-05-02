@@ -36,14 +36,16 @@ library myopia-lib
                      , Myopia.Event
                      , Myopia.State.Game
                      , Myopia.State.Player
+                     , Myopia.State.Room
                      , Myopia.State.Type
   build-depends:       base ^>= 4.14.1.0
                      , containers ^>= 0.6.4.1
+                     , graphics-sdl
                      , lens ^>= 5.0.1
                      , random ^>= 1.2.0
                      , sdl2-gfx
-                     , graphics-sdl
                      , text ^>= 1.2.4.1
+                     , vector ^>= 0.12.3.0
   hs-source-dirs:      src, src/Myopia
   ghc-options:         -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-unticked-promoted-constructors
 
