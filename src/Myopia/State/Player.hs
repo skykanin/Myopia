@@ -18,8 +18,8 @@ module Myopia.State.Player (
 import Data.Set (Set)
 import qualified Data.Set as S
 import Graphics.SDL (CInt, Name, Point (P), V2 (V2))
+import Graphics.SDL.Data.Picture (SpriteData (..), noTransform, scaleBy)
 import Myopia.State.Type (Animate (..), MoveDir (..))
-import Prelude hiding (Left, Right)
 
 data PlayerMovement = Idle | Running
   deriving (Eq, Show)
@@ -29,7 +29,7 @@ data Player = Player
   , running :: Animate
   , playerMovement :: PlayerMovement
   , moveDirections :: Set MoveDir
-  , position :: Point V2 CInt
+  , spriteData :: SpriteData
   }
   deriving (Show)
 
@@ -65,7 +65,7 @@ initPlayer =
           }
     , playerMovement = Idle
     , moveDirections = S.empty
-    , position = P (V2 600 300)
+    , spriteData = scaleBy 4 $ noTransform (P (V2 600 300))
     }
 
 movePlayerBy :: CInt -> MoveDir -> Point V2 CInt -> Point V2 CInt
@@ -74,6 +74,19 @@ movePlayerBy i MoveDown (P (V2 x y)) = P (V2 x (y + i))
 movePlayerBy i MoveLeft (P (V2 x y)) = P (V2 (x - i) y)
 movePlayerBy i MoveRight (P (V2 x y)) = P (V2 (x + i) y)
 
+-- | Change sprite flip state based on movement direction
+flipSprite :: Set MoveDir -> V2 Bool -> V2 Bool
+flipSprite moveDirs flipSprite
+  | MoveLeft `S.member` moveDirs = V2 True False
+  | MoveRight `S.member` moveDirs = V2 False False
+  | otherwise = flipSprite
+
+-- | Clamp movement speed when moving diagonally
+clampMoveLength :: CInt -> Set MoveDir -> CInt
+clampMoveLength moveBy moveDirs
+  | S.size moveDirs >= 2 = round $ (fromIntegral moveBy :: Float) / sqrt 2
+  | otherwise = moveBy
+
 iteratePlayer :: Player -> Player
 iteratePlayer player@Player {..} =
   case playerMovement of
@@ -81,5 +94,11 @@ iteratePlayer player@Player {..} =
     Running ->
       player
         { running = running {currentSprite = (currentSprite running + 1) `mod` (animSlowdown running * length (sprites running))}
-        , position = foldr (movePlayerBy 5) position moveDirections
+        , spriteData =
+            spriteData
+              { pos =
+                  let moveSpeed = clampMoveLength 6 moveDirections
+                   in foldr (movePlayerBy moveSpeed) (pos spriteData) moveDirections
+              , flipVec = flipSprite moveDirections (flipVec spriteData)
+              }
         }
