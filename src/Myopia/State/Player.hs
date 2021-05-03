@@ -65,7 +65,7 @@ initPlayer =
           }
     , playerMovement = Idle
     , moveDirections = S.empty
-    , spriteData = scaleBy 4 $ noTransform (P (V2 600 300))
+    , spriteData = scaleBy 4 $ noTransform (P (V2 600 300)) (V2 16 28)
     }
 
 movePlayerBy :: CInt -> MoveDir -> Point V2 CInt -> Point V2 CInt

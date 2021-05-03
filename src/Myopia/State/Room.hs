@@ -42,17 +42,17 @@ textureNames :: [Name]
 textureNames = ["floor", "cracked floor", "left wall", "right wall", "top wall", "bottom wall", "top left corner", "top right corner", "bottom left corner", "bottom right corner"]
 
 texturePaths :: [FilePath]
-texturePaths = map ("assets/" <>) ["floor_regular.png", "floor_cracked.png", "wall_side_mid_left.png", "wall_side_mid_right.png", "wall_top_mid.png", "wall_bottom_mid.png", "wall_side_top_left.png", "wall_side_top_right.png", "wall_side_bottom_left.png", "wall_side_bottom_right.png"]
+texturePaths = map ("assets/" <>) ["floor_regular.png", "floor_cracked.png", "wall_side_mid_left.png", "wall_side_mid_right.png", "wall_mid.png", "wall_mid.png", "wall_side_mid_left.png", "wall_side_mid_right.png", "wall_side_mid_left.png", "wall_side_mid_right.png"]
 
 startRoom :: Room
-startRoom = initRoom (15, 10) 5 16 (0, 0)
+startRoom = initRoom (15, 10) 5 16 (16, 16) (40, 40)
 
-initRoom :: (Int, Int) -> CInt -> CInt -> (CInt, CInt) -> Room
-initRoom (width, height) scale spacing startPoint =
+initRoom :: (Int, Int) -> CInt -> CInt -> (CInt, CInt) -> (CInt, CInt) -> Room
+initRoom (width, height) scale spacing spriteSize startPoint =
   Room
     { textures = zip [Floor .. BottomRightCorner] $ zip textureNames texturePaths
     , spacing = spacing
-    , roomLayout = mkRoom (width, height) scale spacing startPoint
+    , roomLayout = mkRoom (width, height) scale spacing spriteSize startPoint
     }
 
 -- | Generate corner indecies given the room dimensions
@@ -77,8 +77,8 @@ toTiles (width, height) index spriteData
     bottom = [lastIdx - (width - 1) .. lastIdx]
     lastIdx = width * height - 1
 
-mkRoom :: (Int, Int) -> CInt -> CInt -> (CInt, CInt) -> Vector (TileType, SpriteData)
-mkRoom t@(width, height) scale spacing initP@(sX, _) = V.imap (toTiles t) spriteDataList
+mkRoom :: (Int, Int) -> CInt -> CInt -> (CInt, CInt) -> (CInt, CInt) -> Vector (TileType, SpriteData)
+mkRoom t@(width, height) scale spacing spriteSize initP@(sX, _) = V.imap (toTiles t) spriteDataList
   where
     spriteDataList = V.unfoldrExactN (width * height) f initP
     inc = scale * spacing
@@ -88,8 +88,9 @@ mkRoom t@(width, height) scale spacing initP@(sX, _) = V.imap (toTiles t) sprite
       | xInc /= 0 && xInc `mod` (inc * len) == 0 = (spriteData, (sX, y + inc))
       | otherwise = (spriteData, (x + inc, y))
       where
-        spriteData = scaleSpriteBy scale x y
+        spriteData = scaleSpriteBy scale (x, y) spriteSize
         xInc = x - sX
 
-scaleSpriteBy :: CInt -> CInt -> CInt -> SpriteData
-scaleSpriteBy scale posX posY = scaleBy scale $ noTransform (P (V2 posX posY))
+scaleSpriteBy :: CInt -> (CInt, CInt) -> (CInt, CInt) -> SpriteData
+scaleSpriteBy scale (posX, posY) (width, height) =
+  scaleBy scale $ noTransform (P (V2 posX posY)) (V2 width height)

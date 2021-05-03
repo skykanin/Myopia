@@ -55,10 +55,10 @@ data Position = TopLeft | BottomLeft | Center
 data SpriteData = SpriteData
   { -- | Point to begin the rendering of rectangle
     pos :: Point V2 CInt
-  , -- | The factor for upscaling the sprite
-    scale :: CInt
   , -- | The point to start drawing the sprite from
     drawFrom :: Position
+  , -- | The size of the sprite in pixels
+    size :: V2 CInt
   , -- | Sprite rotation in degrees
     rotation :: CDouble
   , -- | The point indicating the center of the rotation, or Nothing to rotate around the center of the destination rectangle
@@ -68,16 +68,16 @@ data SpriteData = SpriteData
   }
   deriving (Eq, Show)
 
-noTransform :: Point V2 CInt -> SpriteData
-noTransform position =
 {- |
   Create a sprite data context which doesn't do any transformations on the sprite
   Draws from the center by default
 -}
+noTransform :: Point V2 CInt -> V2 CInt -> SpriteData
+noTransform position size =
   SpriteData
     { pos = position
-    , scale = 1
     , drawFrom = Center
+    , size = size
     , rotation = 0
     , rotationPos = Nothing
     , flipVec = V2 False False
@@ -85,4 +85,4 @@ noTransform position =
 
 -- | Scale sprite by some value
 scaleBy :: CInt -> SpriteData -> SpriteData
-scaleBy size spriteData = spriteData {scale = size}
+scaleBy scale spriteData = spriteData {size = (scale *) <$> size spriteData}
