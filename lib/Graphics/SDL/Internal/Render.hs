@@ -14,9 +14,10 @@ import Data.Foldable (traverse_)
 import Data.IORef (IORef, modifyIORef, readIORef)
 import Data.List (find)
 import Data.Vector.Storable (fromList)
-import Graphics.SDL.Data.Picture (Name, Picture (..), SpriteData (..))
+import Foreign.C.Types (CInt)
+import Graphics.SDL.Data.Picture (Name, Picture (..), Position (..), SpriteData (..))
 import Graphics.SDL.Internal.DrawState (DrawState (..))
-import SDL (Rectangle (..), Renderer, Texture, V2 (..), copyEx, queryTexture, rendererRenderTarget, textureHeight, textureWidth, ($=))
+import SDL (Point (..), Rectangle (..), Renderer, Texture, V2 (..), copyEx, rendererRenderTarget, ($=))
 import SDL.Image (loadTexture)
 import SDL.Primitive
 
@@ -45,12 +46,19 @@ drawPicture renderer state@DrawState {..} picture =
     Sprite name filePath SpriteData {..} -> do
       rendererRenderTarget renderer $= Nothing
       texture <- loadTextureFromCache stateTextures renderer name filePath
-      texInfo <- queryTexture texture
-      let sizeVec = V2 (textureWidth texInfo) (textureHeight texInfo)
-          rect = Rectangle pos ((scale *) <$> sizeVec)
+      let startPos = getStartPos drawFrom pos size
+          rect = Rectangle startPos size
       copyEx renderer texture Nothing (Just rect) rotation rotationPos flipVec
     Pictures pictures ->
       traverse_ (drawPicture renderer state) pictures
+
+-- | Calculate the starting coordinates for drawing the sprite
+getStartPos :: Position -> Point V2 CInt -> V2 CInt -> Point V2 CInt
+getStartPos drawFrom pos@(P (V2 x y)) (V2 width height) =
+  case drawFrom of
+    TopLeft -> pos
+    BottomLeft -> P (V2 x (y - height))
+    Center -> P (V2 (x - (width `div` 2)) (y - (height `div` 2)))
 
 -- | Load new texture unless it already exists in cache
 loadTextureFromCache :: IORef [(Name, Texture)] -> Renderer -> Name -> FilePath -> IO Texture

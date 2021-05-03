@@ -6,7 +6,14 @@
    Portability : portable
  Module defining the Picture data type which represents what to be rendered and helper functions
 -}
-module Graphics.SDL.Data.Picture (Name, Picture (..), SpriteData (..), noTransform, scaleBy) where
+module Graphics.SDL.Data.Picture (
+  Name,
+  Position (..),
+  Picture (..),
+  SpriteData (..),
+  noTransform,
+  scaleBy,
+) where
 
 import Data.Int (Int16)
 import Foreign.C.Types (CDouble, CInt)
@@ -40,12 +47,18 @@ data Picture
     Pictures [Picture]
   deriving (Eq)
 
+-- | Position indicating where to start drawing the sprite from
+data Position = TopLeft | BottomLeft | Center
+  deriving (Eq, Show)
+
 -- | Describes texture to be rendered
 data SpriteData = SpriteData
   { -- | Point to begin the rendering of rectangle
     pos :: Point V2 CInt
   , -- | The factor for upscaling the sprite
     scale :: CInt
+  , -- | The point to start drawing the sprite from
+    drawFrom :: Position
   , -- | Sprite rotation in degrees
     rotation :: CDouble
   , -- | The point indicating the center of the rotation, or Nothing to rotate around the center of the destination rectangle
@@ -55,12 +68,16 @@ data SpriteData = SpriteData
   }
   deriving (Eq, Show)
 
--- | Create a sprite data context which doesn't do any transformations on the sprite
 noTransform :: Point V2 CInt -> SpriteData
 noTransform position =
+{- |
+  Create a sprite data context which doesn't do any transformations on the sprite
+  Draws from the center by default
+-}
   SpriteData
     { pos = position
     , scale = 1
+    , drawFrom = Center
     , rotation = 0
     , rotationPos = Nothing
     , flipVec = V2 False False
