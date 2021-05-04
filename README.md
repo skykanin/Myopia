@@ -14,6 +14,14 @@ enable experimental features by running:
 - `nix-env -iA nixpkgs.nixFlakes`
 - `mkdir ~/.config/nix && echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf`
 
+If you don't want to use nix for the development you will have to provide the system dependencies yourself.
+These can be found listed in the `flake.nix` file under `libraries`.
+The required system dependencies are:
+- `pkg-config`
+- `SDL2`
+- `SDL2_gfx`
+- `SDL2_image`
+
 ## Start contributing!
 Run `nix develop` to enter the development environment.
 
