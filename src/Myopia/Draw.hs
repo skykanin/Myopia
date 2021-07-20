@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 {- |
    Module      : Myopia.Draw
    License     : GNU GPL, version 3 or above

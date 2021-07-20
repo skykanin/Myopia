@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 {- |
    Module      : Myopia.State.Room
    License     : GNU GPL, version 3 or above
