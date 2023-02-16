@@ -1,0 +1,86 @@
+cabal-version:       3.0
+category:            Game
+name:                myopia
+version:             0.1.0.0
+synopsis:            Small rogue lite game built using SDL
+description:
+  Please see the README on GitHub at <https://github.com/skykanin/myopia#readme>
+homepage:            https://github.com/skykanin/myopia
+bug-reports:         https://github.com/skykanin/myopia/issues
+license:             GPL-3.0-or-later
+license-file:        LICENSE
+author:              skykanin
+maintainer:          3789764+skykanin@users.noreply.github.com
+copyright:           skykanin
+build-type:          Simple
+tested-with:         GHC == 9.4.4
+extra-source-files:  README.md
+
+common shared-properties
+  default-language: GHC2021
+  default-extensions:  OverloadedStrings
+                     , RecordWildCards
+
+common shared-ghc-opts
+  ghc-options:         -Wall
+                       -Wredundant-constraints
+                       -Wmissing-export-lists
+                       -Wno-name-shadowing
+                       -Wno-unticked-promoted-constructors
+                       -Wpartial-fields
+
+executable myopia
+  import:              shared-properties
+  main-is:             Main.hs
+  hs-source-dirs:      app
+  build-depends:       base ^>= 4.17.0.0
+                     , myopia
+  ghc-options:         -Wall -O2 
+
+-- The game itself exposed as a library
+library
+  import:              shared-properties
+                     , shared-ghc-opts
+  exposed-modules:     Myopia
+                     , Myopia.Draw
+                     , Myopia.Event
+                     , Myopia.QuadTree
+                     , Myopia.QuadTree.Internal
+                     , Myopia.QuadTree.Tree
+                     , Myopia.State.Game
+                     , Myopia.State.Player
+                     , Myopia.State.Room
+                     , Myopia.State.Type
+                     , Myopia.Util
+
+  build-depends:       base ^>= 4.17.0.0
+                     , containers
+                     , GenericPretty
+                     -- SDL2 wrapper
+                     , graphics 
+                     , lens 
+                     , random 
+                     , sdl2-gfx
+                     , text 
+                     , vector 
+  hs-source-dirs:      src
+                     , src/Myopia
+
+-- unit test suite for the myopia library
+test-suite unit-tests
+  import:              shared-properties
+                     , shared-ghc-opts
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Test.hs
+  other-modules:       Test.QuadTree
+
+  build-depends:       base ^>= 4.17.0.0
+                     , exceptions
+                     , GenericPretty
+                     , myopia
+                     , QuickCheck 
+                     , sandwich
+                     , sandwich-quickcheck
+  
+  ghc-options: -threaded

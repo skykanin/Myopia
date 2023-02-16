@@ -1,5 +1,11 @@
+packages: . */*.cabal
+
+write-ghc-environment-files: never
+
+package *
+    ghc-options: -j4 +RTS -A32m -RTS
+
 source-repository-package
   type: git
-  location: git://github.com/skykanin/sdl2-gfx.git
-
-packages: .
+  location: https://github.com/skykanin/sdl2-gfx
+  tag: dd6c37e5b08a26543897d5865b8af3486aa0f6fb
