@@ -6,11 +6,11 @@
    Portability : portable
  Module dealing with the drawing of the game state
 -}
-module Myopia.Draw where
+module Myopia.Draw (draw) where
 
 import Data.List (find)
 import Data.Maybe (fromMaybe)
-import qualified Data.Vector as V
+import Data.Vector qualified as V
 import Graphics.SDL
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))

@@ -14,7 +14,7 @@ module Myopia.State.Player (
 ) where
 
 import Data.Set (Set)
-import qualified Data.Set as S
+import Data.Set qualified as S
 import Graphics.SDL (CInt, Name, Point (P), V2 (V2))
 import Graphics.SDL.Data.Picture (SpriteData (..), noTransform, scaleBy)
 import Myopia.State.Type (Animate (..), MoveDir (..))

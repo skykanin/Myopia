@@ -18,12 +18,12 @@ type Sprite = (Name, FilePath)
 
 -- | Data type representing an animation in the rendering loop
 data Animate = Animate
-  { -- | The sprites in the loop
-    sprites :: [Sprite]
-  , -- | The sprite we are currently rendering
-    currentSprite :: Int
-  , -- | The rate at which to slow down the rendering speed
-    animSlowdown :: Int
+  { sprites :: [Sprite]
+  -- ^ The sprites in the loop
+  , currentSprite :: Int
+  -- ^ The sprite we are currently rendering
+  , animSlowdown :: Int
+  -- ^ The rate at which to slow down the rendering speed
   }
   deriving (Show)
 

@@ -11,7 +11,7 @@
 module Myopia.Event (handleEvent) where
 
 import Data.Set (Set)
-import qualified Data.Set as S
+import Data.Set qualified as S
 import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
 import Graphics.SDL.Data.Input (
   Keysym (keysymScancode),

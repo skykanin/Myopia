@@ -10,7 +10,7 @@ module Myopia.State.Room (Room (..), TileType (..), startRoom) where
 
 import Data.List (find)
 import Data.Vector (Vector)
-import qualified Data.Vector as V
+import Data.Vector qualified as V
 import Foreign.C.Types (CInt)
 import Graphics.SDL (Name, Point (..), SpriteData, V2 (..))
 import Graphics.SDL.Data.Picture (noTransform, scaleBy)
