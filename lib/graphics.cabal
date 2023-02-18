@@ -15,14 +15,33 @@ copyright:           skykanin
 build-type:          Simple
 tested-with:         GHC == 9.4.4
 
+
 common shared-properties
   default-language: GHC2021
   default-extensions:  OverloadedStrings
                      , RecordWildCards
+                     , DeriveAnyClass
+                     , DerivingStrategies
+                     , DerivingVia
+                     , NoFieldSelectors
+                     , GeneralizedNewtypeDeriving
+                     , LambdaCase
+                     , OverloadedLabels
+                     , StrictData
+                     , OverloadedRecordDot
+
+common shared-ghc-opts
+  ghc-options:         -Wall
+                       -Wredundant-constraints
+                       -Wmissing-export-lists
+                       -Wno-name-shadowing
+                       -Wno-unticked-promoted-constructors
+                       -Wpartial-fields
+                       -Wmissing-deriving-strategies
 
 -- The library providing drawing and rendering abstractions over SDL2
 library
-  import:              shared-properties
+  import:              shared-properties, shared-ghc-opts
   exposed-modules:     Graphics.SDL
                      , Graphics.SDL.Data.Color
                      , Graphics.SDL.Data.Event

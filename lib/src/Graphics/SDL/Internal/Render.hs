@@ -57,8 +57,8 @@ getStartPos :: Position -> Point V2 CInt -> V2 CInt -> Point V2 CInt
 getStartPos drawFrom pos@(P (V2 x y)) (V2 width height) =
   case drawFrom of
     TopLeft -> pos
-    BottomLeft -> P (V2 x (y - height))
-    Center -> P (V2 (x - (width `div` 2)) (y - (height `div` 2)))
+    BottomLeft -> P $ V2 x (y - height)
+    Center -> P $ V2 (x - width) (y - height)
 
 -- | Load new texture unless it already exists in cache
 loadTextureFromCache :: IORef [(Name, Texture)] -> Renderer -> Name -> FilePath -> IO Texture

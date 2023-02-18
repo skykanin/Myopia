@@ -18,12 +18,12 @@ import SDL (Texture, V4 (..))
 
 -- | State of the current draw loop
 data DrawState = DrawState
-  { -- | Fill in the drawn picture
-    filled :: Bool
-  , -- | Color to draw picture in
-    color :: Color
-  , -- | Cache of textures that we've loaded
-    stateTextures :: IORef [(Name, Texture)]
+  { filled :: Bool
+  -- ^ Fill in the drawn picture
+  , color :: Color
+  -- ^ Color to draw picture in
+  , stateTextures :: IORef [(Name, Texture)]
+  -- ^ Cache of textures that we've loaded
   }
   deriving (Eq)
 
