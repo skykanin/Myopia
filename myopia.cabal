@@ -81,8 +81,8 @@ test-suite unit-tests
   import:              shared-properties
                      , shared-ghc-opts
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-  main-is:             Test.hs
+  hs-source-dirs:      test/src
+  main-is:             Main.hs
   other-modules:       Test.QuadTree
 
   build-depends:       base ^>= 4.17.0.0
