@@ -1,8 +1,12 @@
 indentation: 2
-comma-style: leading
-record-brace-space: true
-indent-wheres: true
-diff-friendly-import-export: true
+function-arrows: leading 
+comma-style: leading 
+import-export-style: leading
+indent-wheres: true 
+record-brace-space: true 
+newlines-between-decls: 1 
+haddock-style: single-line
+let-style: inline
+in-style: left-align
 respectful: false
-haddock-style: multi-line
-newlines-between-decls: 1
+
