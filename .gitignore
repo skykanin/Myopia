@@ -1,6 +1,11 @@
+# direnv
 .direnv/
 .envrc
+
+# nix
 result
+
+# haskell
 misc/testUser.json
 dist
 dist-*
@@ -26,3 +31,7 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 data/
+test_runs/
+
+# emacs
+.dir-locals.el
