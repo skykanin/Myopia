@@ -1,26 +1,28 @@
-{- |
-   Module      : Myopia.State.Player
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the player state and related functions
--}
-module Myopia.State.Player (
-  Player (..),
-  PlayerMovement (..),
-  initPlayer,
-  iteratePlayer,
-) where
+-- |
+--    Module      : Myopia.State.Player
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the player state and related functions
+module Myopia.State.Player
+  ( Player (..)
+  , PlayerMovement (..)
+  , initPlayer
+  , iteratePlayer
+  )
+where
 
 import Data.Set (Set)
 import Data.Set qualified as S
+import GHC.Generics (Generic)
 import Graphics.SDL (CInt, Name, Point (P), V2 (V2))
 import Graphics.SDL.Data.Picture (SpriteData (..), noTransform, scaleBy)
 import Myopia.State.Type (Animate (..), MoveDir (..))
+import Optics.Core
 
 data PlayerMovement = Idle | Running
-  deriving (Eq, Show)
+  deriving stock (Generic, Eq, Show)
 
 data Player = Player
   { idle :: Animate
@@ -29,7 +31,7 @@ data Player = Player
   , moveDirections :: Set MoveDir
   , spriteData :: SpriteData
   }
-  deriving (Show)
+  deriving stock (Generic, Show)
 
 idleNames :: [Name]
 idleNames = ["wizard_f_idle_f0", "wizard_f_idle_f1", "wizard_f_idle_f2", "wizard_f_idle_f3"]
@@ -82,21 +84,23 @@ flipSprite moveDirs flipSprite
 -- | Clamp movement speed when moving diagonally
 clampMoveLength :: CInt -> Set MoveDir -> CInt
 clampMoveLength moveBy moveDirs
-  | S.size moveDirs >= 2 = round $ (fromIntegral moveBy :: Float) / sqrt 2
+  | S.size moveDirs >= 2 = round $ fromIntegral @_ @Float moveBy / sqrt 2
   | otherwise = moveBy
 
 iteratePlayer :: Player -> Player
-iteratePlayer player@Player {..} =
-  case playerMovement of
-    Idle -> player {idle = idle {currentSprite = (currentSprite idle + 1) `mod` (animSlowdown idle * length (sprites idle))}}
+iteratePlayer player =
+  case player.playerMovement of
+    Idle ->
+      player
+        & #idle % #currentSprite
+          %~ (\currentSprite -> (currentSprite + 1) `mod` (player.idle.animSlowdown * length player.idle.sprites))
     Running ->
       player
-        { running = running {currentSprite = (currentSprite running + 1) `mod` (animSlowdown running * length (sprites running))}
-        , spriteData =
-            spriteData
-              { pos =
-                  let moveSpeed = clampMoveLength 6 moveDirections
-                   in foldr (movePlayerBy moveSpeed) (pos spriteData) moveDirections
-              , flipVec = flipSprite moveDirections (flipVec spriteData)
-              }
-        }
+        & #running % #currentSprite
+          %~ (\currentSprite -> (currentSprite + 1) `mod` (player.running.animSlowdown * length player.running.sprites))
+        & #spriteData % #pos
+          %~ ( \pos ->
+                let moveSpeed = clampMoveLength 6 player.moveDirections
+                in  foldr (movePlayerBy moveSpeed) pos player.moveDirections
+             )
+        & #spriteData % #flipVec %~ flipSprite player.moveDirections

@@ -20,6 +20,15 @@ common shared-properties
   default-language: GHC2021
   default-extensions:  OverloadedStrings
                      , RecordWildCards
+                     , DeriveAnyClass
+                     , DerivingStrategies
+                     , DerivingVia
+                     , NoFieldSelectors
+                     , GeneralizedNewtypeDeriving
+                     , LambdaCase
+                     , OverloadedLabels
+                     , StrictData
+                     , OverloadedRecordDot
 
 common shared-ghc-opts
   ghc-options:         -Wall
@@ -28,6 +37,7 @@ common shared-ghc-opts
                        -Wno-name-shadowing
                        -Wno-unticked-promoted-constructors
                        -Wpartial-fields
+                       -Wmissing-deriving-strategies
 
 executable myopia
   import:              shared-properties
@@ -55,10 +65,10 @@ library
 
   build-depends:       base ^>= 4.17.0.0
                      , containers
-                     , GenericPretty
                      -- SDL2 wrapper
                      , graphics 
-                     , lens 
+                     , pretty-simple
+                     , optics-core
                      , random 
                      , sdl2-gfx
                      , text 
@@ -77,8 +87,8 @@ test-suite unit-tests
 
   build-depends:       base ^>= 4.17.0.0
                      , exceptions
-                     , GenericPretty
                      , myopia
+                     , pretty-simple
                      , QuickCheck 
                      , sandwich
                      , sandwich-quickcheck

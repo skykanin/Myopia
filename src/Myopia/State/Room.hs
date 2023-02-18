@@ -1,11 +1,10 @@
-{- |
-   Module      : Myopia.State.Room
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the room state and room generation
--}
+-- |
+--    Module      : Myopia.State.Room
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the room state and room generation
 module Myopia.State.Room (Room (..), TileType (..), startRoom) where
 
 import Data.List (find)
@@ -27,14 +26,14 @@ data TileType
   | TopRightCorner
   | BottomLeftCorner
   | BottomRightCorner
-  deriving (Show, Eq, Ord, Enum)
+  deriving stock (Show, Eq, Ord, Enum)
 
 data Room = Room
   { textures :: [(TileType, Sprite)]
   , spacing :: CInt
   , roomLayout :: Vector (TileType, SpriteData)
   }
-  deriving (Eq, Show)
+  deriving stock (Eq, Show)
 
 textureNames :: [Name]
 textureNames = ["floor", "cracked floor", "left wall", "right wall", "top wall", "bottom wall", "top left corner", "top right corner", "bottom left corner", "bottom right corner"]

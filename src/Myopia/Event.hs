@@ -1,26 +1,25 @@
 {-# LANGUAGE PatternSynonyms #-}
 
-{- |
-   Module      : Myopia.Event
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module dealing with game event handling
--}
+-- |
+--    Module      : Myopia.Event
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module dealing with game event handling
 module Myopia.Event (handleEvent) where
 
 import Data.Set (Set)
 import Data.Set qualified as S
 import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
-import Graphics.SDL.Data.Input (
-  Keysym (keysymScancode),
-  Scancode,
-  pattern ScancodeA,
-  pattern ScancodeD,
-  pattern ScancodeS,
-  pattern ScancodeW,
- )
+import Graphics.SDL.Data.Input
+  ( Keysym (keysymScancode)
+  , Scancode
+  , pattern ScancodeA
+  , pattern ScancodeD
+  , pattern ScancodeS
+  , pattern ScancodeW
+  )
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))
 import Myopia.State.Type (MoveDir (..))
@@ -61,7 +60,7 @@ handleEvent event gamestate@GameState {..} =
       let keycode = keysymScancode $ keyboardEventKeysym kbed
           keymotion = keyboardEventKeyMotion kbed
           repeat = keyboardEventRepeat kbed
-       in if not repeat
+      in  if not repeat
             then gamestate {player = updatePlayer keycode keymotion player}
             else gamestate
     _ -> gamestate
