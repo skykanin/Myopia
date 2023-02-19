@@ -15,10 +15,31 @@
     nixpkgs,
     ...
   }:
-    flake-utils.lib.eachSystem (with flake-utils.lib.system; [x86_64-linux x86_64-darwin aarch64-darwin]) (system: let
+    flake-utils.lib.eachSystem (with flake-utils.lib.system; [
+      x86_64-linux
+      x86_64-darwin
+      aarch64-linux
+      aarch64-darwin
+    ]) (system: let
       compiler-version = "ghc944";
-      pkgs = nixpkgs.legacyPackages.${system};
+      # Be explicit about which overlays are in use
+      overlays = {alejandra = import ./nix/overlays/alejandra/default.nix;};
+      inherit (nixpkgs) lib;
+      pkgs =
+        builtins.foldl' (acc: overlay: acc.extend overlay)
+        nixpkgs.legacyPackages.${system} (builtins.attrValues overlays);
+      # Nix formatter
+      formatter = pkgs.alejandra;
     in {
+      apps.check-formatting = {
+        type = "app";
+        program = let
+          name = "nix-check-formatting";
+          script =
+            pkgs.writeShellScriptBin name
+            "${formatter}/bin/alejandra --check * --exclude dist-newstyle";
+        in "${script}/bin/${name}";
+      };
       # setup devShell.
       devShells.default = let
         inherit (pkgs.lib) makeLibraryPath;
@@ -45,6 +66,6 @@
           LD_LIBRARY_PATH = "${libraryPath}";
           LIBRARY_PATH = "${libraryPath}";
         };
-      formatter = pkgs.alejandra;
+      inherit formatter;
     });
 }
