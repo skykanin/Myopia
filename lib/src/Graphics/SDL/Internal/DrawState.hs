@@ -1,15 +1,15 @@
-{- |
-   Module      : Graphics.SDL.Internal.DrawState
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the draw state type for rendering
--}
-module Graphics.SDL.Internal.DrawState (
-  DrawState (..),
-  startDrawState,
-) where
+-- |
+--    Module      : Graphics.SDL.Internal.DrawState
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the draw state type for rendering
+module Graphics.SDL.Internal.DrawState
+  ( DrawState (..)
+  , startDrawState
+  )
+where
 
 import Data.IORef (IORef, newIORef)
 import Graphics.SDL.Data.Color (Color)
@@ -25,7 +25,7 @@ data DrawState = DrawState
   , stateTextures :: IORef [(Name, Texture)]
   -- ^ Cache of textures that we've loaded
   }
-  deriving (Eq)
+  deriving stock (Eq)
 
 startDrawState :: IO DrawState
 startDrawState = do

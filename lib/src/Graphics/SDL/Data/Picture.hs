@@ -1,19 +1,19 @@
-{- |
-   Module      : Graphics.SDL.Data.Picture
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the Picture data type which represents what to be rendered and helper functions
--}
-module Graphics.SDL.Data.Picture (
-  Name,
-  Position (..),
-  Picture (..),
-  SpriteData (..),
-  noTransform,
-  scaleBy,
-) where
+-- |
+--    Module      : Graphics.SDL.Data.Picture
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the Picture data type which represents what to be rendered and helper functions
+module Graphics.SDL.Data.Picture
+  ( Name
+  , Position (..)
+  , Picture (..)
+  , SpriteData (..)
+  , noTransform
+  , scaleBy
+  )
+where
 
 import Data.Int (Int16)
 import Foreign.C.Types (CDouble, CInt)
@@ -72,10 +72,9 @@ data SpriteData = SpriteData
   }
   deriving stock (Generic, Eq, Show)
 
-{- |
-  Create a sprite data context which doesn't do any transformations on the sprite
-  Draws from the center by default
--}
+-- |
+--   Create a sprite data context which doesn't do any transformations on the sprite
+--   Draws from the center by default
 noTransform :: Point V2 CInt -> V2 CInt -> SpriteData
 noTransform position size =
   SpriteData
