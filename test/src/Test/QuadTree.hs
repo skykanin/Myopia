@@ -10,6 +10,7 @@ module Test.QuadTree
   , testBounds
   , testTree
   , propInsertOutOfBounds
+  , propBoundrySoleOwner
   )
 where
 
@@ -19,6 +20,7 @@ import Data.Foldable (traverse_)
 import GHC.Stack.Types (HasCallStack)
 import Myopia.QuadTree
 import Myopia.QuadTree.Internal
+import Optics.Core
 import Test.QuickCheck
 import Test.Sandwich
 import Test.Types
@@ -26,12 +28,22 @@ import Test.Types
 -- TODO: implement property checks
 --
 -- inserting and then querying all in bounds should return the same elements
--- elemsInBoundry (insertElems inbounds qt) = inbounds
+-- elemsInBoundry (insertElems inbounds qt) boundry = inbounds
 --
 -- if an element is inbounds then dividing the boundry should
 -- only cause that element to be inbounds of 1 out of the 4 new boundries
 -- inBounds elem boundry = True -> length (filter inBounds (divide boundry)) = 1
 
+-- | An element that's in bound of a boundry 'b' will only
+-- be in bounds of exactly one boundry when 'b' is divided into four
+-- new boundries.
+propBoundrySoleOwner :: Gen Property
+propBoundrySoleOwner = do
+  boundry <- arbitrary
+  position <- arbitrary @Position `suchThat` flip inBounds boundry
+  pure $ length (filter (inBounds position) $ divide boundry ^.. each) === 1
+
+-- | Inserting an out of bounds element into a @'QuadTree'@ doesn't do anything.
 propInsertOutOfBounds :: Gen Property
 propInsertOutOfBounds = do
   quadTree <- arbitrary @(QuadTree Double Position)

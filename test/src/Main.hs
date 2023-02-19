@@ -19,6 +19,7 @@ basic = do
       testBounds
     introduceQuickCheck $ do
       prop "inserting out of bounds elements doesn't change the quad tree" propInsertOutOfBounds
+      prop "element only belongs to one boundry when it's divided into four new boundries" propBoundrySoleOwner
 
 main :: IO ()
 main = do

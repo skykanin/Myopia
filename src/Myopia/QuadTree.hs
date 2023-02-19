@@ -70,9 +70,14 @@ insert element QuadTree {..} =
         (bNw, bNe, bSw, bSe) = divide boundry
     emptyQuad = Leaf []
 
--- | Splits a boundry into four boundries (nw, ne, sw, se)
+-- | Splits a boundry into four smaller boundries (nw, ne, sw, se)
 divide :: forall i. Fractional i => Boundry i -> (Boundry i, Boundry i, Boundry i, Boundry i)
-divide bound = (split $ P (V2 -halfW -halfH), split $ P (V2 halfW -halfH), split $ P (V2 -halfW halfH), split $ P (V2 halfW halfH))
+divide bound =
+  ( split $ P (V2 -halfW halfH)
+  , split $ P (V2 halfW halfH)
+  , split $ P (V2 -halfW -halfH)
+  , split $ P (V2 halfW -halfH)
+  )
   where
     split :: Point V2 i -> Boundry i
     split diff = Boundry (bound.center + diff) halfW halfH
