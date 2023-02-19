@@ -28,7 +28,8 @@ data Quadrant a
   deriving stock (Eq, Show, Functor, Generic)
 
 -- | A 'QuadTree' contains a region of quadrants with elements, the boundary of the
--- entire 'QuadTree' and the max capacity of elements.
+-- entire 'QuadTree' and the max capacity of elements for each quadrant. If there is
+-- 'Leaf' instead then that's like having one quadrant.
 data QuadTree i a = QuadTree
   { region :: Quadrant [a]
   , boundry :: Boundry i

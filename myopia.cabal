@@ -61,7 +61,6 @@ library
                      , Myopia.Event
                      , Myopia.QuadTree
                      , Myopia.QuadTree.Internal
-                     , Myopia.QuadTree.Tree
                      , Myopia.State.Game
                      , Myopia.State.Player
                      , Myopia.State.Room
@@ -89,6 +88,7 @@ test-suite unit-tests
   hs-source-dirs:      test/src
   main-is:             Main.hs
   other-modules:       Test.QuadTree
+                       Test.Types
 
   build-depends:       base
                      , exceptions
