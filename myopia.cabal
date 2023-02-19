@@ -47,7 +47,7 @@ executable myopia
   import:              shared-properties
   main-is:             Main.hs
   hs-source-dirs:      app
-  build-depends:       base ^>= 4.17.0.0
+  build-depends:       base
                      , myopia
   ghc-options:         -Wall -O2 
 
@@ -67,7 +67,7 @@ library
                      , Myopia.State.Type
                      , Myopia.Util
 
-  build-depends:       base ^>= 4.17.0.0
+  build-depends:       base
                      , containers
                      -- SDL2 wrapper
                      , graphics 
@@ -89,7 +89,7 @@ test-suite unit-tests
   main-is:             Main.hs
   other-modules:       Test.QuadTree
 
-  build-depends:       base ^>= 4.17.0.0
+  build-depends:       base
                      , exceptions
                      , myopia
                      , pretty-simple
