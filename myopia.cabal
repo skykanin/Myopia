@@ -32,12 +32,16 @@ common shared-properties
 
 common shared-ghc-opts
   ghc-options:         -Wall
+                       -fno-warn-type-defaults
+                       -Wincomplete-record-updates
                        -Wredundant-constraints
+                       -Winvalid-haddock
                        -Wmissing-export-lists
                        -Wno-name-shadowing
                        -Wno-unticked-promoted-constructors
                        -Wpartial-fields
                        -Wmissing-deriving-strategies
+                       -Wprepositive-qualified-module
 
 executable myopia
   import:              shared-properties
