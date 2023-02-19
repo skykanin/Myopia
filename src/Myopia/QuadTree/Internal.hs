@@ -16,7 +16,7 @@ import GHC.Generics (Generic)
 import Graphics.SDL (Point (..), V2 (..))
 
 data Boundry i = Boundry
-  { location :: Point V2 i
+  { center :: Point V2 i
   , width :: i
   , height :: i
   }
@@ -27,6 +27,8 @@ data Quadrant a
   | Node (Quadrant a) (Quadrant a) (Quadrant a) (Quadrant a)
   deriving stock (Eq, Show, Functor, Generic)
 
+-- | A 'QuadTree' contains a region of quadrants with elements, the boundary of the
+-- entire 'QuadTree' and the max capacity of elements.
 data QuadTree i a = QuadTree
   { region :: Quadrant [a]
   , boundry :: Boundry i

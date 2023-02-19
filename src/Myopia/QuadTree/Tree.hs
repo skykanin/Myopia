@@ -1,5 +1,4 @@
 {-# LANGUAGE FunctionalDependencies #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 -- |
 --    Module      : Myopia.QuadTree.Tree
@@ -71,12 +70,12 @@ insert element QuadTree {..} =
 
 -- | Splits a boundry into four boundries (nw, ne, sw, se)
 divide :: forall i. Fractional i => Boundry i -> (Boundry i, Boundry i, Boundry i, Boundry i)
-divide Boundry {..} = (split $ P (V2 (-halfW) (-halfH)), split $ P (V2 halfW (-halfH)), split $ P (V2 (-halfW) halfH), split $ P (V2 halfW halfH))
+divide bound = (split $ P (V2 -halfW -halfH), split $ P (V2 halfW -halfH), split $ P (V2 -halfW halfH), split $ P (V2 halfW halfH))
   where
     split :: Point V2 i -> Boundry i
-    split diff = Boundry (location + diff) halfW halfH
-    halfW = width / 2
-    halfH = height / 2
+    split diff = Boundry (bound.center + diff) halfW halfH
+    halfW = bound.width / 2
+    halfH = bound.height / 2
 
 -- | Inclusive bounds check
 inBounds :: (HasPos r i, Ord i) => r -> Boundry i -> Bool
@@ -99,7 +98,7 @@ doesOverlap (Boundry (P (V2 x1 y1)) w1 h1) (Boundry (P (V2 x2 y2)) w2 h2) =
     l2 = x2 - w2
 
 elemsInBoundry :: forall a i. (Fractional i, Ord i) => QuadTree i a -> Boundry i -> [a]
-elemsInBoundry QuadTree {..} = go region boundry
+elemsInBoundry qt = go qt.region qt.boundry
   where
     go :: Quadrant [a] -> Boundry i -> Boundry i -> [a]
     go (Leaf a) quadBound queryBound

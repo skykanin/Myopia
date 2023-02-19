@@ -29,6 +29,7 @@ common shared-properties
                      , OverloadedLabels
                      , StrictData
                      , OverloadedRecordDot
+                     , LexicalNegation
 
 common shared-ghc-opts
   ghc-options:         -Wall
