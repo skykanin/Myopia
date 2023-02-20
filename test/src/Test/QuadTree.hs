@@ -29,19 +29,18 @@ import Test.Types
 --
 -- inserting and then querying all in bounds should return the same elements
 -- elemsInBoundry (insertElems inbounds qt) boundry = inbounds
---
--- if an element is inbounds then dividing the boundry should
--- only cause that element to be inbounds of 1 out of the 4 new boundries
--- inBounds elem boundry = True -> length (filter inBounds (divide boundry)) = 1
 
 -- | An element that's in bound of a boundry 'b' will only
 -- be in bounds of exactly one boundry when 'b' is divided into four
 -- new boundries.
 propBoundrySoleOwner :: Gen Property
 propBoundrySoleOwner = do
-  boundry <- arbitrary
-  position <- arbitrary @Position `suchThat` flip inBounds boundry
-  pure $ length (filter (inBounds position) $ divide boundry ^.. each) === 1
+  boundry@Boundry {..} <- arbitrary
+  let (P (V2 cx cy)) = center
+  position <- Pos <$> choose (cx - width, cx + width) <*> choose (cy - height, cy + height)
+  pure
+    . counterexample (unlines [show boundry, show position])
+    $ length (filter (inBounds position) $ divide boundry ^.. each) === 1
 
 -- | Inserting an out of bounds element into a @'QuadTree'@ doesn't do anything.
 propInsertOutOfBounds :: Gen Property
@@ -65,18 +64,18 @@ testBounds =
         , height = 50
         }
     inside =
-      [ Pos (100, 100)
-      , Pos (40, 50)
-      , Pos (160, 150)
-      , Pos (160, 50)
-      , Pos (40, 150)
+      [ Pos 100 100
+      , Pos 40 50
+      , Pos 160 150
+      , Pos 160 50
+      , Pos 40 150
       ]
     outside =
-      [ Pos (200, 200)
-      , Pos (160, 151)
-      , Pos (40, 49)
-      , Pos (160, 49)
-      , Pos (161, 151)
+      [ Pos 200 200
+      , Pos 160 151
+      , Pos 40 49
+      , Pos 160 49
+      , Pos 161 151
       ]
     withRes list res = map (,res) list
 
@@ -93,9 +92,9 @@ testTree = insertElems positions emptyQT
   where
     emptyQT = emptyTree (Boundry (P (V2 100 100)) 50 50) 4
     positions =
-      [ Pos (100, 100)
-      , Pos (120, 120)
-      , Pos (110, 110)
-      , Pos (125, 125)
-      , Pos (140, 140)
+      [ Pos 100 100
+      , Pos 120 120
+      , Pos 110 110
+      , Pos 125 125
+      , Pos 140 140
       ]

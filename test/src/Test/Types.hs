@@ -17,16 +17,16 @@ import Myopia.Util
 import Test.QuickCheck
 
 -- Dummy data type for inserting into quad trees
-newtype Position = Pos (Double, Double)
+data Position = Pos Double Double
   deriving stock (Eq, Generic, Show)
 
 instance HasPos Position Double where
-  getPosition (Pos (x, y)) = P (V2 x y)
+  getPosition (Pos x y) = P (V2 x y)
 
 -------------------- Arbitrary instances for QuickCheck --------------------
 
 instance Arbitrary Position where
-  arbitrary = liftA2 (Pos ... (,)) arbitrary arbitrary
+  arbitrary = liftA2 Pos arbitrary arbitrary
 
 instance Arbitrary a => Arbitrary (Quadrant a) where
   arbitrary = sized tree
@@ -44,11 +44,11 @@ instance Arbitrary a => Arbitrary (V2 a) where
   arbitrary = V2 <$> arbitrary <*> arbitrary
 
 instance (Num i, Ord i, Arbitrary i) => Arbitrary (Boundry i) where
-  arbitrary = Boundry <$> center <*> width <*> height
-    where
-      center = P ... V2 <$> arbitrary <*> arbitrary
-      width = getPositive . Positive <$> arbitrary
-      height = getPositive . Positive <$> arbitrary
+  arbitrary = do
+    Positive width <- arbitrary
+    Positive height <- arbitrary
+    center <- P ... V2 <$> arbitrary <*> arbitrary
+    pure $ Boundry center width height
 
 -- | Check that each quadrant doesn't contain more elements than
 -- the provided size 'n'.
