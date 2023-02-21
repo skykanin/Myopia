@@ -17,7 +17,7 @@ module Myopia.QuadTree
   , divide
   , doesOverlap
   , elemsInBoundry
-  , emptyTree
+  , empty
   , inBounds
   , insert
   , insertElems
@@ -32,8 +32,8 @@ import Myopia.QuadTree.Internal
 class Num i => HasPos r i | r -> i where
   getPosition :: r -> Point V2 i
 
-emptyTree :: Boundry i -> Int -> QuadTree i a
-emptyTree boundry capacity =
+empty :: Boundry i -> Int -> QuadTree i a
+empty boundry capacity =
   QuadTree
     { region = Leaf []
     , boundry = boundry

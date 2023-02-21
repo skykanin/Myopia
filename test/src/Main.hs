@@ -20,8 +20,7 @@ basic = do
     introduceQuickCheck $ do
       prop "inserting out of bounds elements doesn't change the quad tree" propInsertOutOfBounds
       prop "element only belongs to one boundry when it's divided into four new boundries" propBoundrySoleOwner
+      prop "inserting inbound elements to a quadtree and retrieving them returns the original elements" propInsertOutOfBounds
 
 main :: IO ()
-main = do
-  print testTree
-  runSandwichWithCommandLineArgs defaultOptions basic
+main = runSandwichWithCommandLineArgs defaultOptions basic
