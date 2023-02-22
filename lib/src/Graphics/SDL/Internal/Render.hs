@@ -14,7 +14,7 @@ import Data.IORef (IORef, modifyIORef, readIORef)
 import Data.List (find)
 import Data.Vector.Storable (fromList)
 import Foreign.C.Types (CInt)
-import Graphics.SDL.Data.Picture (Name, Picture (..), Position (..), SpriteData (..))
+import Graphics.SDL.Data.Picture (Picture (..), Position (..), SpriteData (..))
 import Graphics.SDL.Internal.DrawState (DrawState (..))
 import SDL (Point (..), Rectangle (..), Renderer, Texture, V2 (..), copyEx, rendererRenderTarget, ($=))
 import SDL.Image (loadTexture)
@@ -60,7 +60,7 @@ getStartPos drawFrom pos@(P (V2 x y)) (V2 width height) =
     Center -> P $ V2 (x - width) (y - height)
 
 -- | Load new texture unless it already exists in cache
-loadTextureFromCache :: IORef [(Name, Texture)] -> Renderer -> Name -> FilePath -> IO Texture
+loadTextureFromCache :: IORef [(String, Texture)] -> Renderer -> String -> FilePath -> IO Texture
 loadTextureFromCache cacheRef renderer texName texPath = do
   textureCache <- readIORef cacheRef
   let inCache = find (\(name, _) -> name == texName) textureCache

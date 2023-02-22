@@ -9,13 +9,11 @@ module Graphics.SDL.Data.Window
   ( WindowConfig (..)
   , WindowMode (..)
   , WindowGraphicsContext (..)
-  , WindowTitle
   , defaultWindow
   , withSize
   )
 where
 
-import Data.Text (Text)
 import Foreign.C.Types (CInt)
 import SDL (V2 (..))
 import SDL.Video
@@ -24,8 +22,6 @@ import SDL.Video
   , WindowMode (..)
   , defaultWindow
   )
-
-type WindowTitle = Text
 
 withSize :: (CInt, CInt) -> WindowConfig -> WindowConfig
 withSize (x, y) winConf = winConf {windowInitialSize = V2 x y}

@@ -8,9 +8,10 @@
 module Graphics.SDL.Internal.Interact (interact) where
 
 import Control.Monad (unless)
+import Data.Text (Text)
 import Graphics.SDL.Data.Color (Color)
 import Graphics.SDL.Data.Picture (Picture)
-import Graphics.SDL.Data.Window (WindowConfig, WindowTitle)
+import Graphics.SDL.Data.Window (WindowConfig)
 import Graphics.SDL.Internal.DrawState (DrawState, startDrawState)
 import Graphics.SDL.Internal.Render (drawPicture)
 import SDL (initializeAll, ($=))
@@ -21,7 +22,7 @@ import SDL.Video (Renderer, clear, createRenderer, createWindow, defaultRenderer
 import Prelude hiding (interact)
 
 interact
-  :: WindowTitle
+  :: Text
   -- ^ The window title
   -> WindowConfig
   -- ^ a window configuration

@@ -13,7 +13,6 @@ where
 
 import Data.IORef (IORef, newIORef)
 import Graphics.SDL.Data.Color (Color)
-import Graphics.SDL.Data.Picture (Name)
 import SDL (Texture, V4 (..))
 
 -- | State of the current draw loop
@@ -22,7 +21,7 @@ data DrawState = DrawState
   -- ^ Fill in the drawn picture
   , color :: Color
   -- ^ Color to draw picture in
-  , stateTextures :: IORef [(Name, Texture)]
+  , stateTextures :: IORef [(String, Texture)]
   -- ^ Cache of textures that we've loaded
   }
   deriving stock (Eq)

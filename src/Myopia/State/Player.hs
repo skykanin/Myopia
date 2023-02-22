@@ -16,7 +16,7 @@ where
 import Data.Set (Set)
 import Data.Set qualified as S
 import GHC.Generics (Generic)
-import Graphics.SDL (CInt, Name, Point (P), V2 (V2))
+import Graphics.SDL (CInt, Point (P), V2 (V2))
 import Graphics.SDL.Data.Picture (SpriteData (..), noTransform, scaleBy)
 import Myopia.State.Type (Animate (..), MoveDir (..))
 import Optics.Core
@@ -33,13 +33,13 @@ data Player = Player
   }
   deriving stock (Generic, Show)
 
-idleNames :: [Name]
+idleNames :: [String]
 idleNames = ["wizard_f_idle_f0", "wizard_f_idle_f1", "wizard_f_idle_f2", "wizard_f_idle_f3"]
 
 idleSprites :: [FilePath]
 idleSprites = ["wizzard_f_idle_anim_f0.png", "wizzard_f_idle_anim_f1.png", "wizzard_f_idle_anim_f2.png", "wizzard_f_idle_anim_f3.png"]
 
-runNames :: [Name]
+runNames :: [String]
 runNames = ["wizard_f_run_f0", "wizard_f_run_f1", "wizard_f_run_f2", "wizard_f_run_f3"]
 
 runSprites :: [FilePath]

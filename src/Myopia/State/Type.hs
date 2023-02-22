@@ -8,18 +8,14 @@
 module Myopia.State.Type
   ( Animate (..)
   , MoveDir (..)
-  , Sprite
   )
 where
 
 import GHC.Generics (Generic)
-import Graphics.SDL (Name)
-
-type Sprite = (Name, FilePath)
 
 -- | Data type representing an animation in the rendering loop
 data Animate = Animate
-  { sprites :: [Sprite]
+  { sprites :: [(String, FilePath)]
   -- ^ The sprites in the loop
   , currentSprite :: Int
   -- ^ The sprite we are currently rendering
