@@ -17,26 +17,26 @@ import Myopia.State.Room (Room (..))
 import Myopia.State.Type (Animate (..))
 
 draw :: GameState -> Picture
-draw GameState {..} =
+draw gs =
   Pictures
-    [ drawRoom room
-    , drawPlayer player
+    [ drawRoom gs.room
+    , drawPlayer gs.player
     ]
 
 drawPlayer :: Player -> Picture
-drawPlayer Player {..} =
-  case playerMovement of
-    Idle -> Sprite name fp spriteData
+drawPlayer player =
+  case player.playerMovement of
+    Idle -> Sprite name fp player.spriteData
       where
-        (name, fp) = idle.sprites !! (idle.currentSprite `div` idle.animSlowdown)
-    Running -> Sprite name fp spriteData
+        (name, fp) = player.idle.sprites !! (player.idle.currentSprite `div` player.idle.animSlowdown)
+    Running -> Sprite name fp player.spriteData
       where
-        (name, fp) = running.sprites !! (running.currentSprite `div` running.animSlowdown)
+        (name, fp) = player.running.sprites !! (player.running.currentSprite `div` player.running.animSlowdown)
 
 drawRoom :: Room -> Picture
-drawRoom Room {..} = Pictures $ V.toList $ fmap toPicture roomLayout
+drawRoom room = Pictures $ V.toList $ fmap toPicture room.layout
   where
     toPicture (tileType, spriteData) = Sprite name filePath spriteData
       where
         (_, (name, filePath)) =
-          fromMaybe (error "Texture missing in list") $ find ((==) tileType . fst) textures
+          fromMaybe (error "Texture missing in list") $ find ((==) tileType . fst) room.textures
