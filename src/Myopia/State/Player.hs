@@ -69,10 +69,11 @@ initPlayer =
     }
 
 movePlayerBy :: CInt -> MoveDir -> Point V2 CInt -> Point V2 CInt
-movePlayerBy i MoveUp (P (V2 x y)) = P (V2 x (y - i))
-movePlayerBy i MoveDown (P (V2 x y)) = P (V2 x (y + i))
-movePlayerBy i MoveLeft (P (V2 x y)) = P (V2 (x - i) y)
-movePlayerBy i MoveRight (P (V2 x y)) = P (V2 (x + i) y)
+movePlayerBy i mv (P (V2 x y)) = P $ case mv of
+  MoveUp -> V2 x (y - i)
+  MoveDown -> V2 x (y + i)
+  MoveLeft -> V2 (x - i) y
+  MoveRight -> V2 (x + i) y
 
 -- | Change sprite flip state based on movement direction
 flipSprite :: Set MoveDir -> V2 Bool -> V2 Bool
