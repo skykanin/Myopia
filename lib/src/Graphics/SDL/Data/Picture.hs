@@ -69,9 +69,8 @@ data SpriteData = SpriteData
   }
   deriving stock (Generic, Eq, Show)
 
--- |
---   Create a sprite data context which doesn't do any transformations on the sprite
---   Draws from the center by default
+-- | Create a sprite data context which doesn't do any transformations on the sprite.
+-- Draws from the center by default
 noTransform :: Point V2 CInt -> V2 CInt -> SpriteData
 noTransform position size =
   SpriteData
