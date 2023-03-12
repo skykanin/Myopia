@@ -23,6 +23,7 @@ import Graphics.SDL.Data.Input
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Player (Player (..), PlayerMovement (..))
 import Myopia.State.Type (MoveDir (..))
+import Optics.Core
 
 scanToDir :: Scancode -> Maybe MoveDir
 scanToDir ScancodeW = Just MoveUp
@@ -45,13 +46,12 @@ alter _ Nothing dirs = dirs
 alter f (Just el) dirs = f el dirs
 
 updatePlayer :: Scancode -> InputMotion -> Player -> Player
-updatePlayer scancode inputMotion player@Player {..} =
+updatePlayer scancode inputMotion player =
   player
-    { moveDirections = newMovements
-    , playerMovement = updateMoveState newMovements
-    }
+    & #moveDirections .~ newMovements
+    & #movement .~ updateMoveState newMovements
   where
-    newMovements = updateMovements scancode inputMotion moveDirections
+    newMovements = updateMovements scancode inputMotion player.moveDirections
 
 handleEvent :: Event -> GameState -> GameState
 handleEvent event gamestate@GameState {..} =
