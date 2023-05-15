@@ -3,6 +3,9 @@
 
 A simple Roguelike game built using SDL and Haskell.
 
+![image](https://github.com/skykanin/Myopia/assets/3789764/96eaef00-c423-482a-9875-1712e9219c23)
+
+
 # Documentation
 TODO
 
