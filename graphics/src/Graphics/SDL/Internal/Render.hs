@@ -57,7 +57,8 @@ getStartPos drawFrom pos@(P (V2 x y)) (V2 width height) =
   case drawFrom of
     TopLeft -> pos
     BottomLeft -> P $ V2 x (y - height)
-    Center -> P $ V2 (x - width) (y - height)
+    -- TODO: width and height will be rounded in case of odd values which isn't ideal
+    Center -> P $ V2 (x - (width `div` 2)) (y - (height `div` 2))
 
 -- | Load new texture unless it already exists in cache
 loadTextureFromCache :: IORef [(String, Texture)] -> Renderer -> String -> FilePath -> IO Texture
