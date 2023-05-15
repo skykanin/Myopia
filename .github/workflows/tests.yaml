@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@v20
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           extra_nix_config: |
@@ -32,12 +32,12 @@ jobs:
               exit 1
           fi
 
-      # - name: Setup cachix cache
-      #   uses: cachix/cachix-action@v12
-      #   with:
-      #     name: myopia
-      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      #     skipPush: true # push isn't supported for flake based setups: https://github.com/cachix/cachix-action/issues/47
+      - name: Setup cachix cache
+        uses: cachix/cachix-action@v12
+        with:
+          name: myopia
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          skipPush: true # push isn't supported for flake based setups: https://github.com/cachix/cachix-action/issues/47
 
       - name: Setup generic cache
         uses: actions/cache/restore@v3
