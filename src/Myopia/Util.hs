@@ -5,7 +5,13 @@
 --    Stability   : alpha
 --    Portability : portable
 --  Utility module
-module Myopia.Util ((...)) where
+module Myopia.Util ((...), uncurry3, withAssetPath) where
 
 (...) :: (c -> d) -> (a -> b -> c) -> a -> b -> d
 (...) = (.) . (.)
+
+withAssetPath :: [FilePath] -> [FilePath]
+withAssetPath = map ("assets/" <>)
+
+uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry3 f (x, y, z) = f x y z
