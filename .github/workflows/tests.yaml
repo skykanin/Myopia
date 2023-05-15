@@ -57,15 +57,15 @@ jobs:
           nix flake check
           nix run .#check-formatting
 
-      - name: Install dependencies and build artefacts
-        run: |
-          nix develop -c cabal update
-          nix develop -c cabal build --enable-tests
-
       - name: Check Haskell formatting
         run: |
           set -x
           nix develop -c fourmolu --mode check $(find -type f -name "*.hs" -not -path "*/dist-newstyle/*")
+
+      - name: Install dependencies and build artefacts
+        run: |
+          nix develop -c cabal update
+          nix develop -c cabal build --enable-tests
 
       - name: Run tests
         run: nix develop -c cabal test

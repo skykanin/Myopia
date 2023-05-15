@@ -9,7 +9,6 @@
 --  Module dealing with game event handling
 module Myopia.Event (handleEvent) where
 
-import Myopia.State.Entity (Entity(..), Movement(..))
 import Data.Set (Set)
 import Data.Set qualified as S
 import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
@@ -21,6 +20,7 @@ import Graphics.SDL.Data.Input
   , pattern ScancodeS
   , pattern ScancodeW
   )
+import Myopia.State.Entity (Entity (..), Movement (..))
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Type (MoveDir (..))
 import Optics.Core

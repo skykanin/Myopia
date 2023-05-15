@@ -14,7 +14,6 @@ where
 import GHC.Generics (Generic)
 
 -- | Data type representing an animation in the rendering loop
-
 data Animate = Animate
   { sprites :: [(String, FilePath)]
   -- ^ The sprites in the loop
