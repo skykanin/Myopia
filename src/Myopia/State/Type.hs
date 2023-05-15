@@ -14,12 +14,13 @@ where
 import GHC.Generics (Generic)
 
 -- | Data type representing an animation in the rendering loop
+
 data Animate = Animate
   { sprites :: [(String, FilePath)]
   -- ^ The sprites in the loop
   , currentSprite :: Int
   -- ^ The sprite we are currently rendering
-  , animSlowdown :: Int
+  , slowdown :: Int
   -- ^ The rate at which to slow down the rendering speed
   }
   deriving stock (Generic, Show)
