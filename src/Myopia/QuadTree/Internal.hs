@@ -6,7 +6,7 @@
 --    Portability : portable
 --  Internal module exposing the types for the quad tree
 module Myopia.QuadTree.Internal
-  ( Boundry (..)
+  ( Boundary (..)
   , Quadrant (..)
   , QuadTree (..)
   )
@@ -15,12 +15,15 @@ where
 import GHC.Generics (Generic)
 import Graphics.SDL (Point (..), V2 (..))
 
-data Boundry i = Boundry
+data Boundary i = Boundary
   { center :: Point V2 i
+  -- ^ center of the @'Boundary'@
   , width :: i
+  -- ^ width from center to an edge of the @'Boundary'@
   , height :: i
+  -- ^ height from center to an edge of the @'Boundary'@
   }
-  deriving stock (Generic, Eq, Show)
+  deriving stock (Functor, Generic, Eq, Show)
 
 data Quadrant a
   = Leaf a
@@ -32,7 +35,7 @@ data Quadrant a
 -- 'Leaf' instead then that's like having one quadrant.
 data QuadTree i a = QuadTree
   { region :: Quadrant [a]
-  , boundry :: Boundry i
+  , boundary :: Boundary i
   , capacity :: Int
   }
   deriving stock (Eq, Generic, Show)

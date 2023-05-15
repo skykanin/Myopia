@@ -8,7 +8,7 @@
 --    Portability : portable
 --  Exposes the quad tree data structure
 module Myopia.QuadTree
-  ( Boundry (..)
+  ( Boundary (..)
   , HasPos (..)
   , Point (..)
   , Quadrant (..)
@@ -16,7 +16,8 @@ module Myopia.QuadTree
   , V2 (..)
   , divide
   , doesOverlap
-  , elemsInBoundry
+  , elemsInBoundary
+  , elemsInBoundaryExcept
   , empty
   , inBounds
   , insert
@@ -32,11 +33,11 @@ import Myopia.QuadTree.Internal
 class Num i => HasPos r i | r -> i where
   getPosition :: r -> Point V2 i
 
-empty :: Boundry i -> Int -> QuadTree i a
-empty boundry capacity =
+empty :: Boundary i -> Int -> QuadTree i a
+empty boundary capacity =
   QuadTree
     { region = Leaf []
-    , boundry = boundry
+    , boundary = boundary
     , capacity = capacity
     }
 
@@ -47,11 +48,11 @@ insertElems elems qt = foldr insert qt elems
 -- | Insert new element into a quad tree
 insert :: forall a i. (Fractional i, Ord i, HasPos a i) => a -> QuadTree i a -> QuadTree i a
 insert element QuadTree {..} =
-  QuadTree {region = addToQuadrant element boundry region, ..}
+  QuadTree {region = addToQuadrant element boundary region, ..}
   where
-    addToQuadrant :: a -> Boundry i -> Quadrant [a] -> Quadrant [a]
-    addToQuadrant elem boundry (Leaf elems)
-      | inBounds elem boundry =
+    addToQuadrant :: a -> Boundary i -> Quadrant [a] -> Quadrant [a]
+    addToQuadrant elem boundary (Leaf elems)
+      | inBounds elem boundary =
           if length elems < capacity
             then Leaf (elem : elems)
             else
@@ -62,16 +63,16 @@ insert element QuadTree {..} =
                 (insertElems bSe)
       | otherwise = Leaf elems
       where
-        (bNw, bNe, bSw, bSe) = divide boundry
+        (bNw, bNe, bSw, bSe) = divide boundary
         insertElems bound = foldr (`addToQuadrant` bound) emptyQuad (elem : elems)
-    addToQuadrant elem boundry (Node nw ne sw se) =
+    addToQuadrant elem boundary (Node nw ne sw se) =
       Node (addToQuadrant elem bNw nw) (addToQuadrant elem bNe ne) (addToQuadrant elem bSw sw) (addToQuadrant elem bSe se)
       where
-        (bNw, bNe, bSw, bSe) = divide boundry
+        (bNw, bNe, bSw, bSe) = divide boundary
     emptyQuad = Leaf []
 
--- | Splits a boundry into four smaller boundries (nw, ne, sw, se)
-divide :: forall i. Fractional i => Boundry i -> (Boundry i, Boundry i, Boundry i, Boundry i)
+-- | Splits a boundary into four smaller boundries (nw, ne, sw, se)
+divide :: forall i. Fractional i => Boundary i -> (Boundary i, Boundary i, Boundary i, Boundary i)
 divide bound =
   ( split $ P (V2 -halfW halfH)
   , split $ P (V2 halfW halfH)
@@ -79,21 +80,23 @@ divide bound =
   , split $ P (V2 halfW -halfH)
   )
   where
-    split :: Point V2 i -> Boundry i
-    split diff = Boundry (bound.center + diff) halfW halfH
+    split :: Point V2 i -> Boundary i
+    split diff = Boundary (bound.center + diff) halfW halfH
     halfW = bound.width / 2
     halfH = bound.height / 2
 
--- | Inclusive bounds check
-inBounds :: (HasPos r i, Ord i) => r -> Boundry i -> Bool
-inBounds record (Boundry (P (V2 x y)) w h) =
-  px >= (x - w) && px <= (x + w) && py >= (y - h) && py <= (y + h)
+-- | Exclusive bounds check with a bias towards including elements
+-- in the bottom right corner of a boundary.
+inBounds :: (HasPos r i, Ord i) => r -> Boundary i -> Bool
+inBounds record (Boundary (P (V2 cx cy)) w h) =
+  and [(cx - w) < px, (cx + w) >= px, (cy - h) <= py, (cy + h) > py]
   where
     (P (V2 px py)) = getPosition record
 
-doesOverlap :: (Num i, Ord i) => Boundry i -> Boundry i -> Bool
-doesOverlap (Boundry (P (V2 x1 y1)) w1 h1) (Boundry (P (V2 x2 y2)) w2 h2) =
-  t1 > t2 || b1 < b2 || r1 < r2 || l1 < l2
+doesOverlap :: (Num i, Ord i) => Boundary i -> Boundary i -> Bool
+doesOverlap (Boundary (P (V2 x1 y1)) w1 h1) (Boundary (P (V2 x2 y2)) w2 h2) =
+  -- not $ t1 < b2 || t2 < b1 || r1 < l2 || r2 < l1
+  t1 > b2 && t2 > b1 && r1 > l2 && r2 > l1
   where
     t1 = y1 + h1
     t2 = y2 + h2
@@ -104,12 +107,27 @@ doesOverlap (Boundry (P (V2 x1 y1)) w1 h1) (Boundry (P (V2 x2 y2)) w2 h2) =
     l1 = x1 - w1
     l2 = x2 - w2
 
-elemsInBoundry :: forall a i. (Fractional i, Ord i) => QuadTree i a -> Boundry i -> [a]
-elemsInBoundry qt = go qt.region qt.boundry
+-- TODO: Figure out way to factor out 'go' subroutine in the functions below withow
+-- requiring an 'Eq a' constraint on @'elemsInBoundary'@.
+
+elemsInBoundary :: forall a i. (Fractional i, Ord i) => QuadTree i a -> Boundary i -> [a]
+elemsInBoundary qt = go qt.region qt.boundary
   where
-    go :: Quadrant [a] -> Boundry i -> Boundry i -> [a]
+    go :: Quadrant [a] -> Boundary i -> Boundary i -> [a]
     go (Leaf a) quadBound queryBound
       | doesOverlap quadBound queryBound = a
+      | otherwise = []
+    go (Node nw ne sw se) quadBound queryBound =
+      concatMap ($ queryBound) [go nw bNw, go ne bNe, go sw bSw, go se bSe]
+      where
+        (bNw, bNe, bSw, bSe) = divide quadBound
+
+-- | Like 'elemnsInBoundary' except also exclude some specific provided element.
+elemsInBoundaryExcept :: (Fractional i, Ord i, Eq a) => a -> QuadTree i a -> Boundary i -> [a]
+elemsInBoundaryExcept exclude qt = go qt.region qt.boundary
+  where
+    go (Leaf a) quadBound queryBound
+      | doesOverlap quadBound queryBound = filter (/= exclude) a
       | otherwise = []
     go (Node nw ne sw se) quadBound queryBound =
       concatMap ($ queryBound) [go nw bNw, go ne bNe, go sw bSw, go se bSe]
