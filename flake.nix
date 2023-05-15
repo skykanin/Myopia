@@ -7,7 +7,7 @@
 
     # Nix Package set
     nixpkgs.url =
-      "github:nixos/nixpkgs?rev=d7705c01ef0a39c8ef532d1033bace8845a07d35";
+      "github:nixos/nixpkgs?rev=3dcff817eebb7e4afc4e9eae0ce6f722f4d9e399";
   };
 
   outputs = { self, flake-utils, nixpkgs, ... }:
@@ -18,7 +18,7 @@
       aarch64-darwin
     ]) (system:
       let
-        compiler-version = "ghc944";
+        compiler-version = "ghc945";
         # Be explicit about which overlays are in use
         overlays = { alejandra = import ./nix/overlays/alejandra/default.nix; };
         inherit (nixpkgs) lib;
@@ -41,7 +41,6 @@
           hs = pkgs.haskell.packages.${compiler-version};
           hlib = pkgs.haskell.lib;
           tools = [
-            (pkgs.python3.withPackages (p: with p; [ six epc orjson sexpdata ]))
             pkgs.binutils-unwrapped
             pkgs.hlint
             hs.ghc
@@ -53,7 +52,7 @@
             hs.fourmolu
             hs.haskell-language-server
           ];
-          libraries = with pkgs; [ pkg-config SDL2 SDL2_gfx SDL2_image zlib ];
+          libraries = with pkgs; [ libwebp libtiff pkg-config SDL2 SDL2_gfx SDL2_image zlib ];
           libraryPath = "${makeLibraryPath libraries}";
         in pkgs.mkShell {
           name = "dev shell";

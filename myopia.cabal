@@ -13,7 +13,7 @@ author:              skykanin
 maintainer:          3789764+skykanin@users.noreply.github.com
 copyright:           skykanin
 build-type:          Simple
-tested-with:         GHC == 9.4.4
+tested-with:         GHC == 9.4.5
 extra-source-files:  README.md
 
 common shared-properties
@@ -58,12 +58,16 @@ library
                      , shared-ghc-opts
   exposed-modules:     Myopia
                      , Myopia.Draw
+                     , Myopia.Draw.Drawable
                      , Myopia.Event
                      , Myopia.QuadTree
                      , Myopia.QuadTree.Internal
+                     , Myopia.State.Entity
+                     , Myopia.State.Entity.Mob
+                     , Myopia.State.Entity.Player
                      , Myopia.State.Game
-                     , Myopia.State.Player
                      , Myopia.State.Room
+                     , Myopia.State.Tree
                      , Myopia.State.Type
                      , Myopia.Util
 
@@ -75,7 +79,8 @@ library
                      , optics-core
                      , random 
                      , sdl2-gfx
-                     , text 
+                     , text
+                     , uuid
                      , vector 
   hs-source-dirs:      src
                      , src/Myopia
