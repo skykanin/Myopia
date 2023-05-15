@@ -17,10 +17,13 @@ basic = do
     it
       "Ensures that the bounds check works correctly"
       testBounds
+    it
+      "Ensures that 'doesOverlap' works correctly"
+      testOverlappingBoundries
     introduceQuickCheck $ do
       prop "inserting out of bounds elements doesn't change the quad tree" propInsertOutOfBounds
-      prop "element only belongs to one boundry when it's divided into four new boundries" propBoundrySoleOwner
-      prop "inserting inbound elements to a quadtree and retrieving them returns the original elements" propInsertOutOfBounds
+      prop "element only belongs to one boundry when it's divided into four new boundries" propBoundarySoleOwner
+      prop "inserting inbound elements to a quadtree and retrieving them returns the original elements" propElemsInBound
 
 main :: IO ()
 main = runSandwichWithCommandLineArgs defaultOptions basic

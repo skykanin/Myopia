@@ -10,18 +10,19 @@
 module Test.Types (Position (..)) where
 
 import Control.Applicative (liftA2)
+import Foreign.C.Types (CInt)
 import GHC.Generics (Generic)
-import Myopia.QuadTree (Boundry (..), HasPos (..), Point (..), Quadrant (..), V2 (..))
+import Myopia.QuadTree (Boundary (..), HasPos (..), Point (..), Quadrant (..), V2 (..))
 import Myopia.QuadTree.Internal (QuadTree (..))
 import Myopia.Util
 import Test.QuickCheck
 
 -- Dummy data type for inserting into quad trees
-data Position = Pos Double Double
+data Position = Pos CInt CInt
   deriving stock (Eq, Generic, Show)
 
 instance HasPos Position Double where
-  getPosition (Pos x y) = P (V2 x y)
+  getPosition (Pos x y) = P (V2 (fromIntegral x) (fromIntegral y))
 
 -------------------- Arbitrary instances for QuickCheck --------------------
 
@@ -43,12 +44,12 @@ instance Arbitrary a => Arbitrary (Quadrant a) where
 instance Arbitrary a => Arbitrary (V2 a) where
   arbitrary = V2 <$> arbitrary <*> arbitrary
 
-instance (Num i, Ord i, Arbitrary i) => Arbitrary (Boundry i) where
+instance (RealFrac i, Arbitrary i) => Arbitrary (Boundary i) where
   arbitrary = do
-    Positive width <- arbitrary
-    Positive height <- arbitrary
-    center <- P ... V2 <$> arbitrary <*> arbitrary
-    pure $ Boundry center width height
+    center <- P ... V2 @i <$> arbitrary <*> arbitrary
+    Positive @Double width <- arbitrary
+    Positive @Double height <- arbitrary
+    pure $ Boundary (fromIntegral . round <$> center) (fromIntegral $ ceiling width) (fromIntegral $ ceiling height)
 
 -- | Check that each quadrant doesn't contain more elements than
 -- the provided size 'n'.
@@ -56,10 +57,10 @@ hasSize :: Int -> Quadrant [a] -> Bool
 hasSize n (Leaf xs) = n >= length xs
 hasSize n (Node nw ne sw se) = all (hasSize n) [nw, ne, sw, se]
 
-instance (Num i, Ord i, Arbitrary i, Arbitrary a) => Arbitrary (QuadTree i a) where
+instance (RealFrac i, Arbitrary i, Arbitrary a) => Arbitrary (QuadTree i a) where
   arbitrary = do
     -- ensures that the max capacity is 100 elements
     capacity <- chooseInt (0, 100)
     region <- arbitrary `suchThat` hasSize capacity
-    boundry <- arbitrary
-    pure $ QuadTree region boundry capacity
+    boundary <- arbitrary
+    pure $ QuadTree region boundary capacity
