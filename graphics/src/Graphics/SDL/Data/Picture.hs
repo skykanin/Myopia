@@ -1,27 +1,25 @@
-{- |
-   Module      : Graphics.SDL.Data.Picture
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the Picture data type which represents what to be rendered and helper functions
--}
-module Graphics.SDL.Data.Picture (
-  Name,
-  Position (..),
-  Picture (..),
-  SpriteData (..),
-  noTransform,
-  scaleBy,
-) where
+-- |
+--    Module      : Graphics.SDL.Data.Picture
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the Picture data type which represents what to be rendered and helper functions
+module Graphics.SDL.Data.Picture
+  ( Position (..)
+  , Picture (..)
+  , SpriteData (..)
+  , noTransform
+  , scaleBy
+  )
+where
 
 import Data.Int (Int16)
 import Foreign.C.Types (CDouble, CInt)
+import GHC.Generics (Generic)
 import Graphics.SDL.Data.Color (Color)
 import SDL (Point, V2 (..))
 import SDL.Primitive (Pos, Radius, Width)
-
-type Name = String
 
 -- | The picture to be drawn on the screen
 data Picture
@@ -42,36 +40,37 @@ data Picture
   | -- | Draw a shape in a specific colour
     Color Color Picture
   | -- | Draw a sprite given the sprite name, file location and sprite data
-    Sprite Name FilePath SpriteData
+    Sprite String FilePath SpriteData
   | -- | Draw a picture consisting of several others
     Pictures [Picture]
-  deriving (Eq)
+  deriving stock (Eq)
 
 -- | Position indicating where to start drawing the sprite from
-data Position = TopLeft | BottomLeft | Center
-  deriving (Eq, Show)
+data Position
+  = TopLeft
+  | BottomLeft
+  | Center
+  deriving stock (Eq, Show)
 
 -- | Describes texture to be rendered
 data SpriteData = SpriteData
-  { -- | Point to begin the rendering of rectangle
-    pos :: Point V2 CInt
-  , -- | The point to start drawing the sprite from
-    drawFrom :: Position
-  , -- | The size of the sprite in pixels
-    size :: V2 CInt
-  , -- | Sprite rotation in degrees
-    rotation :: CDouble
-  , -- | The point indicating the center of the rotation, or Nothing to rotate around the center of the destination rectangle
-    rotationPos :: Maybe (Point V2 CInt)
-  , -- | Whether to flip the sprite on its axes
-    flipVec :: V2 Bool
+  { pos :: Point V2 CInt
+  -- ^ Point to begin the rendering of rectangle
+  , drawFrom :: Position
+  -- ^ The point to start drawing the sprite from
+  , size :: V2 CInt
+  -- ^ The size of the sprite in pixels
+  , rotation :: CDouble
+  -- ^ Sprite rotation in degrees
+  , rotationPos :: Maybe (Point V2 CInt)
+  -- ^ The point indicating the center of the rotation, or Nothing to rotate around the center of the destination rectangle
+  , flipVec :: V2 Bool
+  -- ^ Whether to flip the sprite on its axes
   }
-  deriving (Eq, Show)
+  deriving stock (Generic, Eq, Show)
 
-{- |
-  Create a sprite data context which doesn't do any transformations on the sprite
-  Draws from the center by default
--}
+-- | Create a sprite data context which doesn't do any transformations on the sprite.
+-- Draws from the center by default
 noTransform :: Point V2 CInt -> V2 CInt -> SpriteData
 noTransform position size =
   SpriteData
@@ -85,4 +84,4 @@ noTransform position size =
 
 -- | Scale sprite by some value
 scaleBy :: CInt -> SpriteData -> SpriteData
-scaleBy scale spriteData = spriteData {size = (scale *) <$> size spriteData}
+scaleBy scale spriteData = spriteData {size = (scale *) <$> spriteData.size}

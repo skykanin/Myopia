@@ -1,0 +1,68 @@
+cabal-version:       3.0
+category:            Graphics
+name:                graphics
+version:             0.1.0.0
+synopsis:            Functional 2D graphics rendering API around SDL2
+description:
+  Please see the README on GitHub at <https://github.com/skykanin/myopia/lib#readme>
+homepage:            https://github.com/skykanin/myopia/lib
+bug-reports:         https://github.com/skykanin/myopia/issues
+license:             GPL-3.0-or-later
+license-file:        LICENSE
+author:              skykanin
+maintainer:          3789764+skykanin@users.noreply.github.com
+copyright:           skykanin
+build-type:          Simple
+tested-with:         GHC == 9.4.5
+
+
+common shared-properties
+  default-language: GHC2021
+  default-extensions:  OverloadedStrings
+                     , RecordWildCards
+                     , DeriveAnyClass
+                     , DerivingStrategies
+                     , DerivingVia
+                     , NoFieldSelectors
+                     , GeneralizedNewtypeDeriving
+                     , LambdaCase
+                     , OverloadedLabels
+                     , StrictData
+                     , OverloadedRecordDot
+                     , LexicalNegation
+
+common shared-ghc-opts
+  ghc-options:         -Wall
+                       -fno-warn-type-defaults
+                       -Wincomplete-record-updates
+                       -Wredundant-constraints
+                       -Winvalid-haddock
+                       -Wmissing-export-lists
+                       -Wno-name-shadowing
+                       -Wno-unticked-promoted-constructors
+                       -Wpartial-fields
+                       -Wmissing-deriving-strategies
+                       -Wprepositive-qualified-module
+
+-- The library providing drawing and rendering abstractions over SDL2
+library
+  import:              shared-properties, shared-ghc-opts
+  exposed-modules:     Graphics.SDL
+                     , Graphics.SDL.Data.Color
+                     , Graphics.SDL.Data.Event
+                     , Graphics.SDL.Data.Input
+                     , Graphics.SDL.Data.Picture
+                     , Graphics.SDL.Data.Window
+                     , Graphics.SDL.Interact
+
+  other-modules:       Graphics.SDL.Internal.Render
+                     , Graphics.SDL.Internal.DrawState
+                     , Graphics.SDL.Internal.Interact
+
+  build-depends:       base ^>= 4.17.0.0
+                     , sdl2 
+                     , sdl2-image 
+                     , sdl2-gfx
+                     , text 
+                     , vector 
+  hs-source-dirs:      src

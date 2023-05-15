@@ -1,22 +1,18 @@
-{-# LANGUAGE RecordWildCards #-}
-
-{- |
-   Module      : Myopia.State.Room
-   License     : GNU GPL, version 3 or above
-   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
-   Stability   : alpha
-   Portability : portable
- Module defining the room state and room generation
--}
+-- |
+--    Module      : Myopia.State.Room
+--    License     : GNU GPL, version 3 or above
+--    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+--    Stability   : alpha
+--    Portability : portable
+--  Module defining the room state and room generation
 module Myopia.State.Room (Room (..), TileType (..), startRoom) where
 
 import Data.List (find)
 import Data.Vector (Vector)
-import qualified Data.Vector as V
+import Data.Vector qualified as V
 import Foreign.C.Types (CInt)
-import Graphics.SDL (Name, Point (..), SpriteData, V2 (..))
+import Graphics.SDL (Point (..), SpriteData, V2 (..))
 import Graphics.SDL.Data.Picture (noTransform, scaleBy)
-import Myopia.State.Type (Sprite)
 
 data TileType
   = Floor
@@ -29,16 +25,16 @@ data TileType
   | TopRightCorner
   | BottomLeftCorner
   | BottomRightCorner
-  deriving (Show, Eq, Ord, Enum)
+  deriving stock (Show, Eq, Ord, Enum)
 
 data Room = Room
-  { textures :: [(TileType, Sprite)]
+  { textures :: [(TileType, (String, FilePath))]
   , spacing :: CInt
-  , roomLayout :: Vector (TileType, SpriteData)
+  , layout :: Vector (TileType, SpriteData)
   }
-  deriving (Eq, Show)
+  deriving stock (Eq, Show)
 
-textureNames :: [Name]
+textureNames :: [String]
 textureNames = ["floor", "cracked floor", "left wall", "right wall", "top wall", "bottom wall", "top left corner", "top right corner", "bottom left corner", "bottom right corner"]
 
 texturePaths :: [FilePath]
@@ -52,7 +48,7 @@ initRoom (width, height) scale spacing spriteSize startPoint =
   Room
     { textures = zip [Floor .. BottomRightCorner] $ zip textureNames texturePaths
     , spacing = spacing
-    , roomLayout = mkRoom (width, height) scale spacing spriteSize startPoint
+    , layout = mkRoom (width, height) scale spacing spriteSize startPoint
     }
 
 -- | Generate corner indecies given the room dimensions
