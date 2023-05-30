@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.Draw
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module dealing with the drawing of the game state
+{- |
+   Module      : Myopia.Draw
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module dealing with the drawing of the game state
+-}
 module Myopia.Draw (DebugMode (..), Drawable (draw)) where
 
 import Data.List (find)
@@ -19,8 +20,8 @@ import Myopia.State.Entity qualified as Entity
 import Myopia.State.Game (GameState (..))
 import Myopia.State.Room (Room (..))
 import Myopia.State.Type (Animate (..))
-import Optics.Core
 import Myopia.Util qualified as Util
+import Optics.Core
 
 -- | Whether or not to enabe the debugging mode where metadata
 -- is drawn around different game objects.
@@ -31,7 +32,7 @@ data DebugMode = Enabled | Disabled
 class Drawable a where
   draw :: DebugMode -> a -> Picture
 
-whenEnabled :: Monoid m => DebugMode -> m -> m
+whenEnabled :: (Monoid m) => DebugMode -> m -> m
 whenEnabled debugMode value = case debugMode of
   Enabled -> value
   Disabled -> mempty
@@ -53,11 +54,13 @@ instance Drawable (Boundary CInt) where
 instance Drawable Entity where
   draw debugMode entity = Pictures $ entitySprite : debug
     where
-      debug = whenEnabled debugMode
-        [ draw debugMode $ floor @Double @CInt <$> Entity.mkBoundary entity
-        , drawText (V2 80 20) displayPosition bottom
-        , drawText (V2 40 20) displayMoveState $ bottom + P (V2 0 20)
-        ]
+      debug =
+        whenEnabled
+          debugMode
+          [ draw debugMode $ floor @Double @CInt <$> Entity.mkBoundary entity
+          , drawText (V2 80 20) displayPosition bottom
+          , drawText (V2 40 20) displayMoveState $ bottom + P (V2 0 20)
+          ]
       drawText = Text (Util.withFontPath "joystix monospace.otf") 20 Nothing
       displayMoveState = Util.showt entity.movement
       displayPosition = let V2 x y = pos in "Pos:" <> Util.showt (x, y)
@@ -82,7 +85,7 @@ instance Drawable Room where
           (_, (name, filePath)) =
             fromMaybe (error "Texture missing in list") $ find ((==) tileType . fst) room.textures
 
-instance Drawable a => Drawable (QuadTree Double a) where
+instance (Drawable a) => Drawable (QuadTree Double a) where
   draw debugMode qt =
     Pictures $
       boundries

@@ -1,12 +1,13 @@
 {-# LANGUAGE FunctionalDependencies #-}
 
--- |
---    Module      : Myopia.QuadTree
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Exposes the quad tree data structure
+{- |
+   Module      : Myopia.QuadTree
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Exposes the quad tree data structure
+-}
 module Myopia.QuadTree
   ( Boundary (..)
   , HasPos (..)
@@ -30,7 +31,7 @@ import Myopia.QuadTree.Internal
 
 -- | Interface for records that have positional data
 -- associated with them.
-class Num i => HasPos r i | r -> i where
+class (Num i) => HasPos r i | r -> i where
   getPosition :: r -> Point V2 i
 
 empty :: Boundary i -> Int -> QuadTree i a
@@ -72,7 +73,7 @@ insert element QuadTree {..} =
     emptyQuad = Leaf []
 
 -- | Splits a boundary into four smaller boundries (nw, ne, sw, se)
-divide :: forall i. Fractional i => Boundary i -> (Boundary i, Boundary i, Boundary i, Boundary i)
+divide :: forall i. (Fractional i) => Boundary i -> (Boundary i, Boundary i, Boundary i, Boundary i)
 divide bound =
   ( split $ P (V2 -halfW halfH)
   , split $ P (V2 halfW halfH)

@@ -1,23 +1,24 @@
--- |
---    Module      : Graphics.SDL.Internal.Render
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module for the internal rendering shapes to the screen
+{- |
+   Module      : Graphics.SDL.Internal.Render
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module for the internal rendering shapes to the screen
+-}
 module Graphics.SDL.Internal.Render (drawPicture) where
 
-import Data.Map.Strict (Map)
-import Data.Map.Strict qualified as Map
 import Data.Foldable (for_, traverse_)
 import Data.IORef (IORef, modifyIORef, readIORef)
 import Data.List (find)
+import Data.Map.Strict (Map)
+import Data.Map.Strict qualified as Map
 import Data.Vector.Storable (fromList)
 import Foreign.C.Types (CInt)
 import Graphics.SDL.Data.Picture (Picture (..), Position (..), SpriteData (..))
 import Graphics.SDL.Internal.DrawState (DrawState (..))
 import SDL (Point (..), Rectangle (..), Renderer, Texture, V2 (..), copyEx, rendererRenderTarget, ($=))
-import SDL.Font (Font, load, setStyle, blended)
+import SDL.Font (Font, blended, load, setStyle)
 import SDL.Image (loadTexture)
 import SDL.Primitive
 import SDL.Video.Renderer (createTextureFromSurface, freeSurface)

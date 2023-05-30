@@ -1,12 +1,13 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
--- |
---    Module      : Test.Types
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
--- Types and typeclass instances for writing tests
+{- |
+   Module      : Test.Types
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+Types and typeclass instances for writing tests
+-}
 module Test.Types (Position (..)) where
 
 import Control.Applicative (liftA2)
@@ -29,7 +30,7 @@ instance HasPos Position Double where
 instance Arbitrary Position where
   arbitrary = liftA2 Pos arbitrary arbitrary
 
-instance Arbitrary a => Arbitrary (Quadrant a) where
+instance (Arbitrary a) => Arbitrary (Quadrant a) where
   arbitrary = sized tree
     where
       tree 0 = Leaf <$> arbitrary
@@ -41,7 +42,7 @@ instance Arbitrary a => Arbitrary (Quadrant a) where
         where
           subtree = tree (n `div` 4)
 
-instance Arbitrary a => Arbitrary (V2 a) where
+instance (Arbitrary a) => Arbitrary (V2 a) where
   arbitrary = V2 <$> arbitrary <*> arbitrary
 
 instance (RealFrac i, Arbitrary i) => Arbitrary (Boundary i) where

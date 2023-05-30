@@ -1,10 +1,11 @@
--- |
---    Module      : Graphics.SDL.Data.Picture
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the Picture data type which represents what to be rendered and helper functions
+{- |
+   Module      : Graphics.SDL.Data.Picture
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the Picture data type which represents what to be rendered and helper functions
+-}
 module Graphics.SDL.Data.Picture
   ( Position (..)
   , Picture (..)

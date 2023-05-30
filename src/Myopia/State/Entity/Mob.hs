@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.State.Entity.Mob
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the mob state and related functions
+{- |
+   Module      : Myopia.State.Entity.Mob
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the mob state and related functions
+-}
 module Myopia.State.Entity.Mob
   ( initMobs
   , iterateMob

@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.QuadTree.Internal
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Internal module exposing the types for the quad tree
+{- |
+   Module      : Myopia.QuadTree.Internal
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Internal module exposing the types for the quad tree
+-}
 module Myopia.QuadTree.Internal
   ( Boundary (..)
   , Quadrant (..)

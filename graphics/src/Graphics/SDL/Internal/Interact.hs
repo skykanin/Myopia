@@ -1,28 +1,29 @@
--- |
---    Module      : Graphics.SDL.Internal.Interact
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module for the internal rendering loop logic
+{- |
+   Module      : Graphics.SDL.Internal.Interact
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module for the internal rendering loop logic
+-}
 module Graphics.SDL.Internal.Interact (interact) where
 
-import Data.Map.Strict (Map)
+import Control.Monad (unless)
 import Data.Foldable (traverse_)
 import Data.IORef (IORef, readIORef)
-import Control.Monad (unless)
+import Data.Map.Strict (Map)
 import Data.Text (Text)
 import Graphics.SDL.Data.Color (Color)
 import Graphics.SDL.Data.Picture (Picture)
 import Graphics.SDL.Data.Window (WindowConfig)
-import Graphics.SDL.Internal.DrawState (DrawState(..), startDrawState)
+import Graphics.SDL.Internal.DrawState (DrawState (..), startDrawState)
 import Graphics.SDL.Internal.Render (drawPicture)
 import SDL (initializeAll, ($=))
 import SDL.Event (Event, EventPayload (..), eventPayload, pollEvents)
-import SDL.Framerate (delay_, with)
-import SDL.Image qualified as Image
 import SDL.Font (Font)
 import SDL.Font qualified as Font
+import SDL.Framerate (delay_, with)
+import SDL.Image qualified as Image
 import SDL.Video (Renderer, clear, createRenderer, createWindow, defaultRenderer, present, rendererDrawColor)
 import Prelude hiding (interact)
 
