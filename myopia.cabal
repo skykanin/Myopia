@@ -58,7 +58,6 @@ library
                      , shared-ghc-opts
   exposed-modules:     Myopia
                      , Myopia.Draw
-                     , Myopia.Draw.Drawable
                      , Myopia.Event
                      , Myopia.QuadTree
                      , Myopia.QuadTree.Internal

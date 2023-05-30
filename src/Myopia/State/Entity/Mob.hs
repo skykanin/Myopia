@@ -18,7 +18,7 @@ import Graphics.SDL (Point (P), V2 (V2))
 import Graphics.SDL.Data.Picture (noTransform, scaleBy)
 import Myopia.State.Entity (Animation (..), Entity (..), EntityType (..), Movement (..))
 import Myopia.State.Type (Animate (..))
-import Myopia.Util (withAssetPath)
+import Myopia.Util qualified as Util
 import Optics.Core
 
 idleNames :: [String]
@@ -39,7 +39,7 @@ initMob pos = do
           Animation
             { idle =
                 Animate
-                  { sprites = zip idleNames (withAssetPath idleSprites)
+                  { sprites = zip idleNames (map Util.withAssetPath idleSprites)
                   , currentSprite = 0
                   , slowdown = 6
                   }
