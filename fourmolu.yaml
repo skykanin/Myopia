@@ -1,12 +1,17 @@
 indentation: 2
-function-arrows: leading 
-comma-style: leading 
+column-limit: 120
+function-arrows: leading
+comma-style: leading
 import-export-style: leading
-indent-wheres: true 
-record-brace-space: true 
-newlines-between-decls: 1 
+indent-wheres: true
+record-brace-space: true
+newlines-between-decls: 1
 haddock-style: single-line
+haddock-style-module: multi-line
 let-style: inline
 in-style: left-align
-respectful: false
-
+single-constraint-parens: always
+unicode: never
+respectful: true
+fixities: []
+reexports: []

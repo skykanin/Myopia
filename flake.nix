@@ -6,7 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # Nix Package set
-    nixpkgs.url = "github:nixos/nixpkgs?rev=3dcff817eebb7e4afc4e9eae0ce6f722f4d9e399";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = {
@@ -54,7 +54,7 @@
           hs.cabal-fmt
           hs.implicit-hie
           (hlib.dontCheck hs.ghcid)
-          hs.fourmolu
+          hs.fourmolu_0_12_0_0
           hs.haskell-language-server
         ];
         libraries = with pkgs; [libwebp libtiff pkg-config SDL2 SDL2_gfx SDL2_image zlib];
