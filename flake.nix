@@ -57,7 +57,7 @@
           hs.fourmolu_0_12_0_0
           hs.haskell-language-server
         ];
-        libraries = with pkgs; [libwebp libtiff pkg-config SDL2 SDL2_gfx SDL2_image zlib];
+        libraries = with pkgs; [libwebp libtiff pkg-config SDL2 SDL2_gfx SDL2_image SDL2_ttf zlib];
         libraryPath = "${makeLibraryPath libraries}";
       in
         pkgs.mkShell {

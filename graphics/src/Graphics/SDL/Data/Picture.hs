@@ -15,10 +15,12 @@ module Graphics.SDL.Data.Picture
 where
 
 import Data.Int (Int16)
+import Data.Text (Text)
 import Foreign.C.Types (CDouble, CInt)
 import GHC.Generics (Generic)
 import Graphics.SDL.Data.Color (Color)
 import SDL (Point, V2 (..))
+import SDL.Font (Style)
 import SDL.Primitive (Pos, Radius, Width)
 
 -- | The picture to be drawn on the screen
@@ -39,6 +41,8 @@ data Picture
     Fill Picture
   | -- | Draw a shape in a specific colour
     Color Color Picture
+  | -- | Draw text given a font filepath, font-size, style, rectangle size, text to render and position
+    Text FilePath CInt (Maybe Style) (V2 CInt) Text (Point V2 CInt)
   | -- | Draw a sprite given the sprite name, file location and sprite data
     Sprite String FilePath SpriteData
   | -- | Draw a picture consisting of several others
