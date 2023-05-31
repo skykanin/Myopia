@@ -1,17 +1,23 @@
 {-# LANGUAGE PatternSynonyms #-}
 
--- |
---    Module      : Myopia.Event
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module dealing with game event handling
+{- |
+   Module      : Myopia.Event
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module dealing with game event handling
+-}
 module Myopia.Event (handleEvent) where
 
 import Data.Set (Set)
 import Data.Set qualified as S
-import Graphics.SDL.Data.Event (Event (eventPayload), EventPayload (KeyboardEvent), InputMotion (..), KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat))
+import Graphics.SDL.Data.Event
+  ( Event (eventPayload)
+  , EventPayload (KeyboardEvent)
+  , InputMotion (..)
+  , KeyboardEventData (keyboardEventKeyMotion, keyboardEventKeysym, keyboardEventRepeat)
+  )
 import Graphics.SDL.Data.Input
   ( Keysym (keysymScancode)
   , Scancode

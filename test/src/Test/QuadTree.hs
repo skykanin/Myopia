@@ -1,10 +1,11 @@
--- |
---    Module      : Test.QuadTree
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Unit tests ensuring proper behaviour of the QuadTree data structure
+{- |
+   Module      : Test.QuadTree
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Unit tests ensuring proper behaviour of the QuadTree data structure
+-}
 module Test.QuadTree
   ( Position (..)
   , testBounds
@@ -105,7 +106,7 @@ testBoundary boundary pos expected = do
     Right _ -> pure ()
     Left _ -> expectationFailure $ unwords ["Expected:", show pos, "to be in boundary of", show boundary]
 
-testOverlappingBoundries :: MonadCatch m => m ()
+testOverlappingBoundries :: (MonadCatch m) => m ()
 testOverlappingBoundries =
   traverse_ (uncurry3 testOverlap) $
     withExpected overlap True <> withExpected don'tOverlap False

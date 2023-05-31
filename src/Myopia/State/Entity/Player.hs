@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.State.Entity.Player
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the player state and related functions
+{- |
+   Module      : Myopia.State.Entity.Player
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the player state and related functions
+-}
 module Myopia.State.Entity.Player
   ( initPlayer
   , iteratePlayer
@@ -18,7 +19,7 @@ import Graphics.SDL (CInt, Point (P), V2 (V2))
 import Graphics.SDL.Data.Picture (SpriteData (..), noTransform, scaleBy)
 import Myopia.State.Entity
 import Myopia.State.Type (Animate (..), MoveDir (..))
-import Myopia.Util (withAssetPath)
+import Myopia.Util qualified as Util
 import Optics.Core
 
 idleNames :: [String]
@@ -42,13 +43,13 @@ initPlayer = do
           Animation
             { idle =
                 Animate
-                  { sprites = zip idleNames (withAssetPath idleSprites)
+                  { sprites = zip idleNames (map Util.withAssetPath idleSprites)
                   , currentSprite = 0
                   , slowdown = 6
                   }
             , moving =
                 Animate
-                  { sprites = zip runNames (withAssetPath runSprites)
+                  { sprites = zip runNames (map Util.withAssetPath runSprites)
                   , currentSprite = 0
                   , slowdown = 6
                   }
@@ -90,7 +91,8 @@ iteratePlayer player =
     Moving ->
       player
         & #animations % #moving % #currentSprite
-          %~ (\currentSprite -> (currentSprite + 1) `mod` (player.animations.moving.slowdown * length player.animations.moving.sprites))
+          %~ ( \currentSprite -> (currentSprite + 1) `mod` (player.animations.moving.slowdown * length player.animations.moving.sprites)
+             )
         & #spriteData % #pos
           %~ ( \pos ->
                 let moveSpeed = clampMoveLength 6 player.moveDirections

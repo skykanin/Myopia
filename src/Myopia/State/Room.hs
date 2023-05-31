@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.State.Room
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the room state and room generation
+{- |
+   Module      : Myopia.State.Room
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the room state and room generation
+-}
 module Myopia.State.Room (Room (..), TileType (..), startRoom) where
 
 import Data.List (find)
@@ -35,10 +36,34 @@ data Room = Room
   deriving stock (Eq, Show)
 
 textureNames :: [String]
-textureNames = ["floor", "cracked floor", "left wall", "right wall", "top wall", "bottom wall", "top left corner", "top right corner", "bottom left corner", "bottom right corner"]
+textureNames =
+  [ "floor"
+  , "cracked floor"
+  , "left wall"
+  , "right wall"
+  , "top wall"
+  , "bottom wall"
+  , "top left corner"
+  , "top right corner"
+  , "bottom left corner"
+  , "bottom right corner"
+  ]
 
 texturePaths :: [FilePath]
-texturePaths = map ("assets/" <>) ["floor_regular.png", "floor_cracked.png", "wall_side_mid_left.png", "wall_side_mid_right.png", "wall_mid.png", "wall_mid.png", "wall_side_mid_left.png", "wall_side_mid_right.png", "wall_side_mid_left.png", "wall_side_mid_right.png"]
+texturePaths =
+  map
+    ("assets/" <>)
+    [ "floor_regular.png"
+    , "floor_cracked.png"
+    , "wall_side_mid_left.png"
+    , "wall_side_mid_right.png"
+    , "wall_mid.png"
+    , "wall_mid.png"
+    , "wall_side_mid_left.png"
+    , "wall_side_mid_right.png"
+    , "wall_side_mid_left.png"
+    , "wall_side_mid_right.png"
+    ]
 
 startRoom :: Room
 startRoom = initRoom (15, 10) 5 16 (16, 16) (40, 40)

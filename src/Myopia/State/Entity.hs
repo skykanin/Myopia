@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.State.Entity
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the games entity type
+{- |
+   Module      : Myopia.State.Entity
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the games entity type
+-}
 module Myopia.State.Entity
   ( Animation (..)
   , Entity (..)

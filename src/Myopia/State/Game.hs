@@ -1,10 +1,11 @@
--- |
---    Module      : Myopia.State.Game
---    License     : GNU GPL, version 3 or above
---    Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
---    Stability   : alpha
---    Portability : portable
---  Module defining the overall game state and game state iteration
+{- |
+   Module      : Myopia.State.Game
+   License     : GNU GPL, version 3 or above
+   Maintainer  : skykanin <3789764+skykanin@users.noreply.github.com>
+   Stability   : alpha
+   Portability : portable
+ Module defining the overall game state and game state iteration
+-}
 module Myopia.State.Game
   ( GameState (..)
   , iterateWorld

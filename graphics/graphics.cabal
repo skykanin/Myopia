@@ -4,8 +4,8 @@ name:                graphics
 version:             0.1.0.0
 synopsis:            Functional 2D graphics rendering API around SDL2
 description:
-  Please see the README on GitHub at <https://github.com/skykanin/myopia/lib#readme>
-homepage:            https://github.com/skykanin/myopia/lib
+    Declarative rendering API built on top of SDL2. Similar in design to [https://flora.pm/packages/@hackage/gloss](gloss).
+homepage:            https://github.com/skykanin/myopia/graphics
 bug-reports:         https://github.com/skykanin/myopia/issues
 license:             GPL-3.0-or-later
 license-file:        LICENSE
@@ -60,9 +60,11 @@ library
                      , Graphics.SDL.Internal.Interact
 
   build-depends:       base ^>= 4.17.0.0
-                     , sdl2 
+                     , containers
+                     , sdl2
                      , sdl2-image 
                      , sdl2-gfx
-                     , text 
+                     , sdl2-ttf
+                     , text
                      , vector 
   hs-source-dirs:      src
