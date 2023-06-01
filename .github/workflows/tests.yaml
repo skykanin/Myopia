@@ -66,9 +66,11 @@ jobs:
           set -x
           nix develop -c fourmolu --mode check $(find -type f -name "*.hs" -not -path "*/dist-newstyle/*")
 
+      - name: Update cabal packages
+        run: nix develop -c cabal update
+
       - name: Build
-        run: |
-          nix develop -c cabal build
+        run: nix develop -c cabal build
 
       - name: Run tests
         run: nix develop -c cabal test
