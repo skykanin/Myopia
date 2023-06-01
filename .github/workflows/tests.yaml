@@ -70,7 +70,7 @@ jobs:
         run: nix develop -c cabal update
 
       - name: Build
-        run: nix develop -c cabal build
+        run: nix develop -c cabal build test:unit-tests
 
       - name: Run tests
         run: nix develop -c cabal test
