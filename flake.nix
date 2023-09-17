@@ -56,7 +56,7 @@
           hs.haskell-language-server
         ];
         libraries = with pkgs; [freetype glib harfbuzz libwebp libtiff pcre2 pkg-config SDL2 SDL2_gfx SDL2_image SDL2_ttf zlib];
-        libraryPath = with pkgs.lib; "${makeLibraryPath libraries}";
+        libraryPath = "${lib.makeLibraryPath libraries}";
       in
         pkgs.mkShell {
           name = "dev shell";
