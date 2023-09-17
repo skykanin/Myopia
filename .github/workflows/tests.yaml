@@ -16,17 +16,13 @@ jobs:
     timeout-minutes: 120
 
     env:
-      GHC_VERSION: "9.4.5"
+      GHC_VERSION: "9.4.6"
 
     steps:
       - uses: actions/checkout@v3
 
-      - uses: cachix/install-nix-action@v20
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          extra_nix_config: |
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-            substituters = https://cache.nixos.org/
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
 
       - name: Check Cachix token exists
         env:
@@ -42,7 +38,6 @@ jobs:
         with:
           name: myopia
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-          skipPush: true # push isn't supported for flake based setups: https://github.com/cachix/cachix-action/issues/47
 
       - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
         uses: actions/cache@v3
@@ -54,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.GHC_VERSION }}-${{ hashFiles('**/*.cabal', '**/cabal.project', '**/cabal.project.freeze') }}
           restore-keys: ${{ runner.os }}-${{ env.GHC_VERSION }}-
 
-      - name: Check nix environment
+      - name: Check Nix environment
         run: |
           set -x
 
