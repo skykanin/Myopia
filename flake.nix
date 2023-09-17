@@ -21,7 +21,7 @@
       aarch64-linux
       aarch64-darwin
     ]) (system: let
-      compiler-version = "ghc945";
+      compiler-version = "ghc946";
       # Be explicit about which overlays are in use
       overlays = {alejandra = import ./nix/overlays/alejandra/default.nix;};
       inherit (nixpkgs) lib;
@@ -40,9 +40,7 @@
             "${formatter}/bin/alejandra --check * --exclude dist-newstyle";
         in "${script}/bin/${name}";
       };
-      # setup devShell.
       devShells.default = let
-        inherit (pkgs.lib) makeLibraryPath;
         hs = pkgs.haskell.packages.${compiler-version};
         hlib = pkgs.haskell.lib;
         tools = [
@@ -50,15 +48,15 @@
           pkgs.hlint
           hs.ghc
           hs.cabal-install
-          hs.cabal-plan
+          # hs.cabal-plan
           hs.cabal-fmt
           hs.implicit-hie
           (hlib.dontCheck hs.ghcid)
-          hs.fourmolu_0_12_0_0
+          hs.fourmolu
           hs.haskell-language-server
         ];
-        libraries = with pkgs; [libwebp libtiff pkg-config SDL2 SDL2_gfx SDL2_image SDL2_ttf zlib];
-        libraryPath = "${makeLibraryPath libraries}";
+        libraries = with pkgs; [freetype glib harfbuzz libwebp libtiff pcre2 pkg-config SDL2 SDL2_gfx SDL2_image SDL2_ttf zlib];
+        libraryPath = with pkgs.lib; "${makeLibraryPath libraries}";
       in
         pkgs.mkShell {
           name = "dev shell";
